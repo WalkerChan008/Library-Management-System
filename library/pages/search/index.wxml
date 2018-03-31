@@ -1,0 +1,11 @@
+<!--pages/search/index.wxml-->
+<view class="container">
+  <view class="search">
+    <icon class="search-icon" type="search" size="14" />
+    <image class="search-scan" src="../../images/scan.png" bindtap="bindScanTap" />
+    <input confirm-type="search" placeholder="输入书名开始搜索" placeholder-class="plhd" bindconfirm="bindConfirm" />
+  </view>
+  <view wx:key="key" wx:for="{{books_info}}">
+    {{index + 1}}、《{{item.title}}》
+  </view>
+</view>

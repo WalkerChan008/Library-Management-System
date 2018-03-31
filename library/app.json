@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/search/index",
+    "pages/books_info/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#5fd5ff",
+    "navigationBarTitleText": "图书馆服务平台",
+    "backgroundColor": "#efefef"
+  },
+  "tabBar": {
+    "color": "#000",
+    "selectedColor": "#5fd5ff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/search/index",
+        "text": "搜索",
+        "iconPath": "/images/library-1.png",
+        "selectedIconPath": "/images/library-2.png"
+      },
+      {
+        "pagePath": "pages/search/index",
+        "text": "热榜",
+        "iconPath": "/images/hot-list-1.png",
+        "selectedIconPath": "/images/hot-list-2.png"
+      },
+      {
+        "pagePath": "pages/search/index",
+        "text": "我的",
+        "iconPath": "/images/mine-1.png",
+        "selectedIconPath": "/images/mine-2.png"
+      }
+    ]
+  }
+}
