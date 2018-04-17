@@ -1,11 +1,20 @@
 <!--pages/search/index.wxml-->
 <view class="container">
-  <view class="search">
-    <icon class="search-icon" type="search" size="14" />
-    <image class="search-scan" src="../../images/scan.png" bindtap="bindScanTap" />
-    <input confirm-type="search" placeholder="输入书名开始搜索" placeholder-class="plhd" bindconfirm="bindConfirm" />
+  <view class="logo">
+     <image src="../../images/logo.png"></image>
   </view>
-  <view wx:key="key" wx:for="{{books_info}}">
-    {{index + 1}}、《{{item.title}}》
+
+  <view class="wrap-search">
+    <view class="search">
+      <icon class="search-icon" type="search" size="14" />
+      <input confirm-type="search" placeholder="输入书名开始搜索" placeholder-class="plhd" bindconfirm="bindConfirm" />
+      <image class="search-scan" src="../../images/scan.png" bindtap="bindScanTap" />
+    </view>
+  </view>
+
+  <view class="demo">
+    <view wx:key="key" wx:for="{{books_info}}">
+      ISBN: {{item.isbn}}
+    </view> 
   </view>
 </view>

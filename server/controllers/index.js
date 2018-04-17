@@ -6,7 +6,7 @@ var model = require('../model/index');
 var router = express.Router();
 
 router.get('/code_search', function (req, res) {
-    var isbn = req.query.isbn;    // 获取url'?'后传过来的参数
+    var isbn = req.query.isbn;    // 获取url参数
     model.getBooksInfoByISBN(isbn, res);
 });
 

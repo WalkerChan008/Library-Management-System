@@ -1,0 +1,74 @@
+/* pages/books_hot/hot.wxss */
+/* 排行榜1 */
+.hot-head {
+  padding: 20px 20px 0;
+  /* border-bottom: 1px solid #ccc; */
+  box-shadow: 0 0 20px 1px #ccc;
+  /* height: 200rpx; */
+}
+.hot-head .hot-title {
+  font-weight: bold;
+  text-align: center;
+}
+.weui-flex {
+  padding: 30px;
+  text-align: center;
+  vertical-align: 10px;
+}
+.weui-flex .hot-des {
+  display: flex;
+  align-items: flex-end;
+}
+.weui-flex .hot-des text {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.weui-flex__item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+}
+.weui-flex__item .hot-book-img {
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* 排行榜2-10 */
+.hot-body {
+  padding: 20px 0;
+}
+.rank-list {
+  display: flex;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ccc;
+}
+.rank-num,
+.rank-title,
+.rank-like {
+  display: flex;
+  align-items: center;
+}
+.rank-num {
+  padding-right: 20px;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.rank-img {
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.rank-title {
+  padding: 0 10px;
+}
+.rank-like {
+  flex: 1;
+  justify-content: flex-end;
+}

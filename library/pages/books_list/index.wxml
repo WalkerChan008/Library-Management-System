@@ -1,0 +1,51 @@
+<!--pages/books_list/index.wxml-->
+<view class="container">
+
+  <view class="list-count">
+    <text>为您找到相关结果{{list_count}}条</text>
+  </view>
+
+  <view class="list-wrap">
+    <view class="list-item">
+      <view class="book-img"></view>
+      <view class="book-cont">
+        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
+        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
+        <text class="book-publisher">索书号：TP312JA/1472</text>
+        <text class="book-publisher">出版社：机械工业出版社</text>
+        <text class="book-publisher">出版日期：2012-1-1</text>
+      </view>
+    </view>
+    <view class="list-item">
+      <view class="book-img"></view>
+      <view class="book-cont">
+        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
+        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
+        <text class="book-publisher">索书号：TP312JA/1472</text>
+        <text class="book-publisher">出版社：机械工业出版社</text>
+        <text class="book-publisher">出版日期：2012-1-1</text>
+      </view>
+    </view>
+    <view class="list-item">
+      <view class="book-img"></view>
+      <view class="book-cont">
+        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
+        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
+        <text class="book-publisher">索书号：TP312JA/1472</text>
+        <text class="book-publisher">出版社：机械工业出版社</text>
+        <text class="book-publisher">出版日期：2012-1-1</text>
+      </view>
+    </view>
+    <view class="list-item">
+      <view class="book-img"></view>
+      <view class="book-cont">
+        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
+        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
+        <text class="book-publisher">索书号：TP312JA/1472</text>
+        <text class="book-publisher">出版社：机械工业出版社</text>
+        <text class="book-publisher">出版日期：2012-1-1</text>
+      </view>
+    </view>
+  </view>
+
+</view>

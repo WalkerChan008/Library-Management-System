@@ -1,0 +1,23 @@
+<!--pages/books_hot/hot.wxml-->
+<view class="container">
+  <view class="hot-head">
+    <view class="hot-title">微信小程序图书热榜标题</view>
+    <view class="weui-flex">
+      <view class="hot-des"><text>1</text>st</view>
+      <view class="weui-flex__item">
+        <image class="hot-book-img"></image>
+      </view>
+      <view class="hot-des">58赞</view>
+    </view>
+  </view>
+  <view class="hot-body">
+    <block wx:for="{{rank_list}}" wx:key="id">
+      <view class="rank-list">
+        <view class="rank-num">{{ item.num }}</view>
+        <image class="rank-img" src="{{item.img}}"></image>
+        <view class="rank-title">{{ item.title }}</view>
+        <view class="rank-like">{{ item.like }}</view>
+      </view>
+    </block>
+  </view>
+</view>

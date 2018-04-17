@@ -1,1 +1,6 @@
-{}
+{
+  "navigationBarTextStyle": "black",
+  "navigationBarBackgroundColor": "#e9e9e9",
+  "navigationBarTitleText": "图书馆服务平台",
+  "backgroundColor": "#efefef"
+}

@@ -1,5 +1,7 @@
 Page({
 
+  url: require('../../config.js'),
+
   /**
    * 页面的初始数据
    */
@@ -8,30 +10,38 @@ Page({
     checkbox: []
   },
 
-  insert: function () {
-    var cb = this.data.checkbox;
-    console.log(cb);
-    cb.push(this.data.checkbox.length);
-    this.setData({
-      checkbox: cb
-    });
-  },
-
   /** 
    * 绑定扫一扫按钮事件
    */
   bindScanTap: function () {
+    var bookReg = /^978(\d){10}$/g;   // 正则匹配isbn
+    var scanType = '';
+
     wx.scanCode({
       success: (res) => {
-        wx.request({
-          url: 'http://localhost/code_search?isbn=' + res.result,
-          success: (data) => {
-            var books_info = data.data;
-
-            this.setData({books_info: books_info});
-            console.log(books_info);
-          }
-        })
+        scanType = res.scanType;
+        if(scanType === 'QR_CODE') {
+          wx.showModal({
+            title: '扫描失败！',
+            content: '无法识别二维码，请扫描书本上的条形码。',
+            showCancel: false
+          });
+        }else if(bookReg.test(res.result) || scanType === 'CODE_39') {
+          wx.request({
+            url: this.url + '/code_search?isbn=' + res.result,
+            success: (data) => {
+              var books_info = data.data;
+              console.log(books_info);
+              this.setData({ books_info: books_info });
+            }
+          })
+        }else {
+          wx.showModal({
+            title: '扫描失败！',
+            content: '无法识别商品码，请扫描书本上的条形码。',
+            showCancel: false
+          });
+        }
       }
     })
   },
@@ -43,7 +53,7 @@ Page({
     var value = e.detail.value.trim();
     if(value) {
       wx.request({
-        url: 'http://localhost/value_search?value=' + value,
+        url: this.url + '/value_search?value=' + value,
         success: (data) => {
           var books_info = data.data;
 

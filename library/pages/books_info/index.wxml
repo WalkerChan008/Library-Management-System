@@ -1,2 +1,79 @@
 <!--pages/books_info/index.wxml-->
-<view></view>
+<view class="container">
+
+    <view class="book-img">
+      <image mode="widthFix" src="https://img3.doubanio.com/lpic/s11117924.jpg"></image>
+    </view>
+
+    <view class="book-box">
+      <text class="box-title">高性能JavaScript</text>
+      <view class="box-cont">
+        <view class="cont-info">
+          <text>作者：【美】Nicholas C. Zakas</text>
+          <text>出版社：电子工业出版社</text>
+          <text>出版时间：2015-8-1</text>
+          <text>ISBN：9787121266775</text>
+          <text>索书号：TP132D/42</text>
+        </view>
+        <view class="cont-like">点赞</view>
+      </view>
+    </view>
+
+    <!-- 简介 start -->
+    <view class="book-box">
+      <text class="box-title">简介</text>
+      <text class="brief-cont {{isFold ? 'fold' : ''}}">如果你使用 JavaScript 构建交互丰富的 Web 应用，那么 JavaScript 代码可能是造成你的Web应用速度变慢的主要原因。《高性能JavaScript》揭示的技术和策略能帮助你在开发过程中消除性能瓶颈。你将会了解如何提升各方面的性能，包括代码的加载、运行、DOM 交互、页面生存周期等。雅虎的前端工程师 Nicholas C. Zakas 和其他五位 JavaScript 专家介绍了页面代码加载的最佳方法和编程技巧，来帮助你编写更为高效和快速的代码。你还会了解到构建和部署文件到生产环境的最佳实践，以及有助于定位线上问题的工具。</text>
+      <view class="icon-wrap" bindtap="iconTap">
+        <image class="icon-arrow {{isFold ? '' : 'hide'}}" mode="widthFix" src="../../images/arrow-down.png"></image>
+        <image class="icon-arrow {{isFold ? 'hide' : ''}}" mode="widthFix" src="../../images/arrow-up.png"></image>
+      </view>
+    </view>
+    <!-- 简介 end -->
+
+    <!-- 折叠列表 start -->
+    <view class="book-box">
+      <text class="box-title">馆藏信息</text>
+      <view class="kind-list">
+          <block wx:for="{{list}}" wx:key="id">
+              <view class="kind-list__item">
+                  <view id="{{item.id}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
+                      <view class="weui-flex__item">{{item.name}}</view>
+                      <image class="kind-list__img" src="images/icon_nav_{{item.id}}.png"></image>
+                  </view>
+                  <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
+                      <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
+                              <!-- <navigator url="{{page}}/{{page}}" class="weui-cell weui-cell_access">
+                                  <view class="weui-cell__bd">{{page}}</view>
+                                  <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                              </navigator> -->
+                              <view class="weui-cells_after-title">
+                                  <view class="weui-cell">
+                                      <view class="weui-cell__bd">条码号</view>
+                                      <view class="weui-cell__ft">12345678</view>
+                                  </view>
+                                  <view class="weui-cell">
+                                      <view class="weui-cell__bd">馆藏状态</view>
+                                      <view class="weui-cell__ft">馆藏中</view>
+                                  </view>
+                                  <view class="weui-cell">
+                                      <view class="weui-cell__bd">定位</view>
+                                      <view class="weui-cell__ft">二楼C区42架B面4列3-4层</view>
+                                  </view>
+                                  <view class="weui-cell">
+                                      <view class="weui-cell__bd">借出时间</view>
+                                      <view class="weui-cell__ft">20180418</view>
+                                  </view>
+                                  <view class="weui-cell">
+                                      <view class="weui-cell__bd">应还时间</view>
+                                      <view class="weui-cell__ft">20180418</view>
+                                  </view>
+                              </view>
+                      </view>
+                  </view>
+              </view>
+          </block>
+      </view>
+    </view>
+    <!-- 折叠列表 end -->
+
+</view>

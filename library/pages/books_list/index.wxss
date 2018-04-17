@@ -1,0 +1,55 @@
+/* pages/books_list/index.wxss */
+.list-count {
+  padding: 10rpx;
+  font-size: 28rpx;
+  color: #aaa;
+  /* border: 1px solid #000; */
+}
+
+.list-wrap {
+
+}
+
+.list-item {
+  display: flex;
+  padding: 15rpx 15rpx 30rpx;
+  /* border: 1px solid #000; */
+  border-top: 10rpx solid #eee;
+  box-sizing: border-box;
+}
+
+.list-item .book-img {
+  width: 27%;
+  height: 270rpx;
+  background: url('https://img3.doubanio.com/lpic/s11117924.jpg') no-repeat;
+  background-size: contain;
+}
+
+.list-item .book-cont {
+  display: flex;
+  flex-flow: column nowrap;
+  margin-left: 15rpx;
+  width: 70%;
+}
+.list-item .book-cont .book-title {
+  margin-bottom: 17rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #424242;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-item .book-cont .book-author {
+  padding-bottom: 10rpx;
+  font-size: 32rpx;
+  color: #424242;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-item .book-cont .book-publisher {
+  padding-top: 10rpx;
+  font-size: 30rpx;
+  color: #aaa;
+}

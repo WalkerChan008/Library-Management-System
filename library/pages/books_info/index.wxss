@@ -1,1 +1,74 @@
 /* pages/books_info/index.wxss */
+.book-img {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 450rpx;
+}
+.book-img image {
+  width: 250rpx;
+}
+
+.book-box {
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx;
+  border-bottom: 6rpx solid #eee;
+}
+.box-title {
+  height: 100rpx;
+  font-size: 46rpx;
+  color: #424242;
+}
+.box-cont {
+  display: flex;
+  font-size: 26rpx;
+  color: #aaa;
+}
+.box-cont .cont-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.box-cont .cont-info text {
+  padding-bottom: 6rpx;
+}
+.box-cont .cont-like {
+  /* flex-grow: 1; */
+  width: 160rpx;
+  height: 160rpx;
+  border: 1px solid #ddd;
+}
+
+/* 简介 */
+.box-title {
+  height: 80rpx;
+  font-size:32rpx;
+  font-weight: bold;
+  color: #000;
+}
+.brief-cont {
+  font-size: 30rpx;
+  text-indent: 2em;
+  color: #000;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+.fold {
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+.hide {
+  display: none;
+}
+.icon-wrap {
+  display: flex;
+  justify-content: center;
+}
+.icon-arrow {
+  width: 48rpx;
+}
+
+/* 折叠列表 */
+.weui-flex{-webkit-box-align:center;-webkit-align-items:center;align-items:center}.weui-cells{margin-top:0;opacity:0;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-transition:.3s;transition:.3s}.weui-cells:after,.weui-cells:before{display:none}.weui-cells_show{opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}.weui-cell:before{right:15px}.kind-list__item{margin:10px 0;background-color:#fff;border:1px solid #ccc;border-radius:5px;overflow:hidden}.kind-list__item:first-child{margin-top:0}.kind-list__img{width:30px;height:30px}.kind-list__item-hd{padding:10px 20px;-webkit-transition:opacity .3s;transition:opacity .3s}.kind-list__item-hd_show{opacity:.4}.kind-list__item-bd{height:0;overflow:hidden}.kind-list__item-bd_show{height:auto}

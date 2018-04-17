@@ -83,7 +83,7 @@ model = {
     },
 
     /**
-     * 格式化从数据库中取出的数据
+     * 格式化从数据库中取出的数据(删除_id字段)
      * @param {Array}
      */
     formatData: function (data) {
