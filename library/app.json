@@ -1,23 +1,21 @@
 {
   "pages": [
     "pages/search/index",
-    "pages/mine/mine",
+    "pages/books_list/index",
     "pages/books_hot/hot",
-    "pages/books_info/index",
-    "pages/books_list/index"
-
+    "pages/mine/mine",
+    "pages/books_info/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarBackgroundColor": "#e9e9e9",
-    "navigationBarTitleText": "图书馆服务平台",
-    "backgroundColor": "#efefef"
+    "navigationBarBackgroundColor": "#f6f6f6",
+    "backgroundColor": "#f6f6f6"
   },
   "tabBar": {
     "color": "#aaa",
     "selectedColor": "#4c4c4c",
-    "borderStyle": "white",
-    "backgroundColor": "#e9e9e9",
+    "borderStyle": "#f6f6f6",
+    "backgroundColor": "#f6f6f6",
     "list": [
       {
         "pagePath": "pages/search/index",

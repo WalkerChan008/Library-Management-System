@@ -1,18 +1,43 @@
 // pages/books_list/index.js
 Page({
 
+  url: require('../../config.js'),
+
   /**
    * 页面的初始数据
    */
   data: {
-    list_count: 0
+    list_count: 0,
+    b_list: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var b_list = [];
+
+    if(options.value) {
+      wx.setNavigationBarTitle({
+        title: '搜索 ' + options.value
+      })
+    }
+
+    console.log(options)
+    wx.request({    // 向后台发起请求，获取图书列表信息
+      url: this.url + '/value_search?value=' + options.value,
+      success: (data) => {
+        console.log(data)
+        b_list = data.data;
+
+        this.setData({
+          list_count: b_list.length,
+          b_list: b_list
+        })
+
+        wx.hideLoading()
+      }
+    })
   },
 
   /**

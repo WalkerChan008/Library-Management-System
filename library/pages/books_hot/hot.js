@@ -1,19 +1,20 @@
 // pages/books_hot/hot.js
 Page({
 
+  url: require('../../config.js'),
+
   /**
    * 页面的初始数据
    */
   data: {
+    top1: {},
     rank_list: [
       {
-        num: 2,
         img: '../../images/bg.png',
         title: 'javascript权威指南指南',
         like: 54
       },
       {
-        num: 2,
         img: '../../images/bg.png',
         title: 'javascript权威指南',
         like: 54
@@ -25,7 +26,22 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var rank_list,
+        top1 = {}
+
+    wx.request({
+      url: this.url + '/book_hot',
+      success: (data) => {
+        rank_list = data.data;
+        top1 = rank_list.shift();
+
+        console.log(top1);
+        this.setData({
+          top1: top1,
+          rank_list: rank_list
+        })
+      }
+    })
   },
 
   /**

@@ -1,4 +1,10 @@
 /* pages/books_hot/hot.wxss */
+.three-point {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 排行榜1 */
 .hot-head {
   padding: 20px 20px 0;
@@ -61,14 +67,18 @@
 .rank-img {
   width: 100rpx;
   height: 100rpx;
+  min-width: 100rpx;
   background-color: #fff;
   border-radius: 50%;
   overflow: hidden;
 }
 .rank-title {
-  padding: 0 10px;
+  padding-left: 10px;
+  width: 400rpx;
+   box-sizing: border-box; 
 }
 .rank-like {
   flex: 1;
   justify-content: flex-end;
+  min-width: 90rpx;
 }

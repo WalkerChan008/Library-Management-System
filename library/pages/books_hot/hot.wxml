@@ -1,23 +1,27 @@
 <!--pages/books_hot/hot.wxml-->
 <view class="container">
-  <view class="hot-head">
-    <view class="hot-title">微信小程序图书热榜标题</view>
-    <view class="weui-flex">
-      <view class="hot-des"><text>1</text>st</view>
-      <view class="weui-flex__item">
-        <image class="hot-book-img"></image>
+  <navigator url="../books_info/index?code_type=isbn&result={{ top1.isbn }}">
+    <view class="hot-head">
+      <view class="hot-title three-point">{{ top1.title }}</view>
+      <view class="weui-flex">
+        <view class="hot-des"><text>1</text>st</view>
+        <view class="weui-flex__item">
+          <image class="hot-book-img" src="{{ top1.images.large || top1.image }}"></image>
+        </view>
+        <view class="hot-des">{{ top1.like }}赞</view>
       </view>
-      <view class="hot-des">58赞</view>
     </view>
-  </view>
+  </navigator>
   <view class="hot-body">
     <block wx:for="{{rank_list}}" wx:key="id">
-      <view class="rank-list">
-        <view class="rank-num">{{ item.num }}</view>
-        <image class="rank-img" src="{{item.img}}"></image>
-        <view class="rank-title">{{ item.title }}</view>
-        <view class="rank-like">{{ item.like }}</view>
-      </view>
+      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn }}">
+        <view class="rank-list">
+          <view class="rank-num">{{ index + 2 }}</view>
+          <image class="rank-img" src="{{ item.images.large || item.image }}"></image>
+          <view class="rank-title"><view class=" three-point">{{ item.title }}</view></view>
+          <view class="rank-like">{{ item.like }}赞</view>
+        </view>
+      </navigator>
     </block>
   </view>
 </view>

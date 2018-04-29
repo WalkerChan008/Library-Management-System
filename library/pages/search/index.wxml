@@ -7,14 +7,26 @@
   <view class="wrap-search">
     <view class="search">
       <icon class="search-icon" type="search" size="14" />
-      <input confirm-type="search" placeholder="输入书名开始搜索" placeholder-class="plhd" bindconfirm="bindConfirm" />
+      <input confirm-type="search" placeholder="搜索书名/扫描条形码" placeholder-class="plhd" bindconfirm="bindConfirm" />
       <image class="search-scan" src="../../images/scan.png" bindtap="bindScanTap" />
     </view>
   </view>
 
-  <view class="demo">
-    <view wx:key="key" wx:for="{{books_info}}">
-      ISBN: {{item.isbn}}
-    </view> 
+  <!-- 消息滚动 start -->
+  <view class="wrap-swiper">
+    <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="3000">
+      <block wx:for="{{msgList}}" wx:key="*this">
+        <navigator url="/pages/index/index?title={{item.url}}" open-type="navigate">
+          <swiper-item>
+            <view class="swiper_item">{{item.title}}</view>
+          </swiper-item>
+        </navigator>
+      </block>
+    </swiper>
+  </view>
+  <!-- 消息滚动 end -->
+
+  <view class="read-img">
+    <image src="../../images/read.png" mode="aspectFit"></image>
   </view>
 </view>

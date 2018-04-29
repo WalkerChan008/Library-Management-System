@@ -24,27 +24,23 @@ function connectDB(callback) {
     })
 }
 
-
-// function handle(operate, collection_name, json1, json2, callback) {
-//     if(typeof json2 !== 'function') {
-//         util[operate](collection_name, json1, json2, callback);
-//         return;
-//     }
-//     callback = json2;
-//     util[operate](collection_name, json1, callback);
-// }
-
 /**
  * 增删查改数据方法集
  */
 var util = {
 
-    // 查找数据
-    _find: function (collection_name, json, callback) {
-        connectDB(function (db) {
-            var result = db.collection(collection_name).find(json);
-            result.toArray(callback);
-        });
+    /**
+     * 查找数据
+     * @param collection_name - 集合名称
+     * @param json - 查询条件
+     */
+    _find: function (collection_name, json) {
+        return new Promise(function (resolve, reject) {
+            connectDB(function (db) {
+                var result = db.collection(collection_name).find(json);
+                resolve(result.toArray());
+            });
+        })
     },
 
     // 增加数据
@@ -72,7 +68,16 @@ var util = {
                 callback(error, data);
             });
         });
-    }
+    },
+
+    _sortByLike: function (collection_name, json) {
+        return new Promise(function (resolve, reject) {
+            connectDB(function (db) {
+                var result = db.collection(collection_name).find(json).sort({like: -1}).limit(10);
+                resolve(result.toArray());
+            });
+        })
+    },
 }
 
 /**

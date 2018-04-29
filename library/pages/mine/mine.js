@@ -12,6 +12,7 @@ Page({
       { text: '借阅历史', url: '../borrowbook/borrowbook?status=F', icon: '../../images/usermenu/history.png', tips: '' },
       { text: '待归还', url: '../borrowbook/borrowbook?status=Y', icon: '../../images/usermenu/huan.png', tips: '' },
       { text: '个人喜好', url: '../favorcate/favorcate', icon: '../../images/usermenu/favor.png', tips: '' },
+      { text: '消息提醒', url: '../favorcate/favorcate', icon: '../../images/usermenu/favor.png', tips: '' },
     ]
   },
 

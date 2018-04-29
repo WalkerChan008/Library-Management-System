@@ -2,50 +2,23 @@
 <view class="container">
 
   <view class="list-count">
-    <text>为您找到相关结果{{list_count}}条</text>
+    为您找到相关结果<text> {{list_count}} </text>条
   </view>
 
   <view class="list-wrap">
-    <view class="list-item">
-      <view class="book-img"></view>
-      <view class="book-cont">
-        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
-        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
-        <text class="book-publisher">索书号：TP312JA/1472</text>
-        <text class="book-publisher">出版社：机械工业出版社</text>
-        <text class="book-publisher">出版日期：2012-1-1</text>
-      </view>
-    </view>
-    <view class="list-item">
-      <view class="book-img"></view>
-      <view class="book-cont">
-        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
-        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
-        <text class="book-publisher">索书号：TP312JA/1472</text>
-        <text class="book-publisher">出版社：机械工业出版社</text>
-        <text class="book-publisher">出版日期：2012-1-1</text>
-      </view>
-    </view>
-    <view class="list-item">
-      <view class="book-img"></view>
-      <view class="book-cont">
-        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
-        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
-        <text class="book-publisher">索书号：TP312JA/1472</text>
-        <text class="book-publisher">出版社：机械工业出版社</text>
-        <text class="book-publisher">出版日期：2012-1-1</text>
-      </view>
-    </view>
-    <view class="list-item">
-      <view class="book-img"></view>
-      <view class="book-cont">
-        <text class="book-title">构建高性能Web站点修订版aaaaaaaaaaaaaaaaaa</text>
-        <text class="book-author">水电费,sdfsad,dsfsdaf,sdfsad</text>
-        <text class="book-publisher">索书号：TP312JA/1472</text>
-        <text class="book-publisher">出版社：机械工业出版社</text>
-        <text class="book-publisher">出版日期：2012-1-1</text>
-      </view>
-    </view>
+    <block wx:for="{{b_list}}" wx:key="*this">
+      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn }}">
+        <view class="list-item">
+          <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+          <cover-view wx:if="{{ !item.callno }}">111</cover-view>
+          <view class="book-cont">
+            <text class="book-title">{{ item.title }}</text>
+            <text class="book-author" wx:for="{{ item.author }}" wx:key="*this">{{ item }}</text>
+            <text class="book-summary">{{ item.summary }}</text>
+          </view>
+        </view>
+      </navigator>
+    </block>
   </view>
 
 </view>

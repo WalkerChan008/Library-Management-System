@@ -1,41 +1,25 @@
 // pages/books_info/index.js
+var codeQuery = {};
+
 Page({
+
+  url: require('../../config.js'),
 
   /**
    * 页面的初始数据
    */
   data: {
-    isFold: true,       // 简介展开按钮
-    list: [
+    isFold: true,    // 简介展开按钮
+    b_info : {},    // 图书信息
+    list: [    // 馆藏信息列表
       {
-        id: 'form',
-        name: '花江图书馆一楼B库',
-        open: false,
-        pages: ['button', 'list', 'input', 'slider', 'uploader']
-      },
-      {
-        id: 'widget',
-        name: '基础组件',
-        open: false,
-        pages: ['article', 'badge', 'flex', 'footer', 'gallery', 'grid', 'icons', 'loadmore', 'panel', 'preview', 'progress']
-      },
-      {
-        id: 'feedback',
-        name: '操作反馈',
-        open: false,
-        pages: ['actionsheet', 'dialog', 'msg', 'picker', 'toast']
-      },
-      {
-        id: 'nav',
-        name: '导航相关',
-        open: false,
-        pages: ['navbar', 'tabbar']
-      },
-      {
-        id: 'search',
-        name: '搜索相关',
-        open: false,
-        pages: ['searchbar']
+        "code_39": "1659877",
+        "situs": "花江图书馆一楼B库",
+        "position": "22排A面3列4行",
+        "open": false,
+        "state": "collected",
+        "loan_date": "",
+        "return_date": ""
       }
     ]
   },
@@ -45,16 +29,17 @@ Page({
    * 文本过长折叠
    */
   iconTap: function () {
-    this.setData({isFold: !this.data.isFold});
+    this.setData({isFold: !this.data.isFold})
   },
 
   /**
    * 折叠列表事件
    */
   kindToggle: function (e) {
-    var id = e.currentTarget.id, list = this.data.list;
+    var id = e.currentTarget.id,
+        list = this.data.b_info.collection_info;
     for (var i = 0, len = list.length; i < len; ++i) {
-      if (list[i].id == id) {
+      if (list[i].code_39 == id) {
         list[i].open = !list[i].open
       } else {
         list[i].open = false
@@ -69,7 +54,26 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    // wx.showLoading({
+    //   title: '加载中',
+    //   icon: 'loading',
+    //   mask: true
+    // })
+    codeQuery = options
+    wx.request({    // 向后台发起请求，获取图书信息数据
+      url: this.url + '/' + codeQuery.code_type + '_search?' + codeQuery.code_type + '=' + codeQuery.result,
+      success: (data) => {
+        var b_info = data.data[0],
+            list = b_info.collection_info;
+            
+        console.log(b_info);
+
+        this.setData({ 
+          b_info: b_info,
+          list: list
+        });
+      }
+    })
   },
 
   /**
@@ -83,7 +87,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+
   },
 
   /**
@@ -118,6 +122,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-  
+    
   }
 })
