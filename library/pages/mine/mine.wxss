@@ -9,14 +9,27 @@
   text-align: center;
 }
 
-.avatar-wrapper .avatar image {
-  width: 100px;
-  height: 100px;
+.avatar-wrapper .avatar>view {
+  display: inline-block;
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar-wrapper .avatar>view>image {
+  width: 160rpx;
+  height: 160rpx;
 }
 
 .avatar-wrapper .text {
   text-align: center;
   color: #fff;
+}
+
+.avatar-wrapper .text image {
+  width: 100rpx;
 }
 
 .weui-cell__hd image {

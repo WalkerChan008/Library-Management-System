@@ -34,6 +34,7 @@ Page({
 
   /**
    * 折叠列表事件
+   * @param e - 事件源对象
    */
   kindToggle: function (e) {
     var id = e.currentTarget.id,
@@ -50,10 +51,35 @@ Page({
     });
   },
 
+  toLoan: function (e) {
+    var code_39 = e.currentTarget.id
+    wx.showModal({
+      title: '确认借书',
+      content: '您确定借阅《' + this.data.b_info.title + '》？',
+      success: (res) => {
+        if(res.confirm) {
+          wx.request({
+            url: this.url + '/loan_book?b_code=' + code_39,
+            success: (res) => {
+              console.log(res)
+            }
+          })
+        }
+        console.log(res)
+      }
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.getStorage({
+      key: 'libAuth',
+      success: (res) => {
+        console.log(res)
+      },
+    })
     // wx.showLoading({
     //   title: '加载中',
     //   icon: 'loading',
@@ -87,7 +113,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    wx.getStorage({
+      key: 'libAuth',
+      success: (res) => {
+        console.log(res)
+      },
+    })
   },
 
   /**

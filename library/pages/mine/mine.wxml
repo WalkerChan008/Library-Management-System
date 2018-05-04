@@ -3,16 +3,19 @@
   <view class="avatar-wrapper">
     <view>
       <view class="avatar">
-        <image style="border-radius:50%;" src="{{userinfo.avatarUrl ? userinfo.avatarUrl:'../../images/avatar/avatar_01.png'}}"></image>
+        <!-- <image style="border-radius:50%;" src="{{userinfo.avatarUrl ? userinfo.avatarUrl:'../../images/avatar/avatar_01.png'}}"></image> -->
+        <view wx:if="{{wxAuth}}"><open-data type="userAvatarUrl"></open-data></view>
+        <view wx:else><image mode="aspectFit" src="../../images/avatar.png"></image></view>
       </view>
       <view class="text">
-        <text wx:if="{{userinfo.nickName}}">{{userinfo.nickName}}</text>
-        <text wx:else bindtap="toLogin">未授权</text>
+        <open-data wx:if="{{wxAuth}}" type="userNickName"></open-data>
+        <!-- <text wx:else bindtap="toLogin">微信登录</text> -->
+        <button wx:else size="mini" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">微信登录</button>
       </view>
-      <view class="text">
-        <text wx:if="{{userSign==2}}">{{"您还没有填写真实信息，暂不能借书"}}</text>
-        <text wx:elif="{{userSign==1}}">{{"会员用户"}}</text>
-      </view>
+       <view class="text">
+        <view wx:if="{{libAuth}}"><image mode="widthFix" src="../../images/auth.png"></image></view>
+        <view wx:else><image mode="widthFix" src="../../images/auth-no.png"></image></view>
+      </view> 
     </view>
   </view>
   <view class="list-wrapper">
@@ -23,6 +26,7 @@
             <image src="{{item.icon}}"></image>
           </view>
           <view class="weui-cell__bd">{{item.text}}</view>
+          <view class="weui-badge" style="margin-left: 5px;">8</view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{item.tips}}</view>
         </navigator>
       </block>

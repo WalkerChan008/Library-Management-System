@@ -1,21 +1,27 @@
 {
   "pages": [
-    "pages/search/index",
+        "pages/search/index",
+        "pages/mine/mine",
+
+
     "pages/books_list/index",
     "pages/books_hot/hot",
-    "pages/mine/mine",
-    "pages/books_info/index"
+    "pages/books_info/index",
+
+    "pages/lib_auth/lib_auth",
+    "pages/myfavor/myfavor"
+    
   ],
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarBackgroundColor": "#f6f6f6",
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#1b82d1",
     "backgroundColor": "#f6f6f6"
   },
   "tabBar": {
     "color": "#aaa",
-    "selectedColor": "#4c4c4c",
+    "selectedColor": "#1b82d1",
     "borderStyle": "#f6f6f6",
-    "backgroundColor": "#f6f6f6",
+    "backgroundColor": "#fff",
     "list": [
       {
         "pagePath": "pages/search/index",
@@ -26,8 +32,8 @@
       {
         "pagePath": "pages/books_hot/hot",
         "text": "热榜",
-        "iconPath": "/images/hot-list-1.png",
-        "selectedIconPath": "/images/hot-list-2.png"
+        "iconPath": "/images/hot-1.png",
+        "selectedIconPath": "/images/hot-2.png"
       },
       {
         "pagePath": "pages/mine/mine",

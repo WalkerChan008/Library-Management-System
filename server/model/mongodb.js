@@ -34,31 +34,44 @@ var util = {
      * @param collection_name - 集合名称
      * @param json - 查询条件
      */
-    _find: function (collection_name, json) {
+    _find: function (collection_name, json, projections) {
+        projections = projections ? projections : {};
         return new Promise(function (resolve, reject) {
             connectDB(function (db) {
-                var result = db.collection(collection_name).find(json);
+                var result = db.collection(collection_name).find(json).project(projections);
                 resolve(result.toArray());
             });
         })
     },
 
     // 增加数据
-    _insert: function (collection_name, json, callback) {
-        connectDB(function (db) {
-            db.collection(collection_name).insertOne(json, function (error, data) {
-                callback(error, data);   // 拿到数据执行回调函数
+    _insert: function (collection_name, json) {
+        return new Promise(function (resolve, reject) {
+            connectDB(function (db) {
+                var result = db.collection(collection_name).insertOne(json);
+                resolve(result);
             });
-        });
+        })
+        // connectDB(function (db) {
+        //     db.collection(collection_name).insertOne(json, function (error, data) {
+        //         callback(error, data);   // 拿到数据执行回调函数
+        //     });
+        // });
     },
 
     // 更新数据
-    _update: function (collection_name, json1, json2, callback) {
-        connectDB(function (db) {
-            db.collection(collection_name).updateOne(json1, {$set: json2}, function (error, data) {
-                callback(error, data);
+    _update: function (collection_name, json1, json2) {
+        return new Promise(function (resolve, reject) {
+            connectDB(function (db) {
+                var result = db.collection(collection_name).updateOne(json1, {$set: json2});
+                resolve(result);
             });
-        });
+        })
+        // connectDB(function (db) {
+        //     db.collection(collection_name).updateOne(json1, {$set: json2}, function (error, data) {
+        //         callback(error, data);
+        //     });
+        // });
     },
 
     // 删除数据
@@ -78,6 +91,16 @@ var util = {
             });
         })
     },
+
+    _findOneAndUpdate: function (collection_name, json) {
+        json.options = json.options ? json.options : {};
+        return new Promise(function (resolve, reject) {
+            connectDB(function (db) {
+                var result = db.collection(collection_name).findOneAndUpdate(json.filter, json.update, json.options)
+                resolve(result);
+            });
+        })
+    }
 }
 
 /**

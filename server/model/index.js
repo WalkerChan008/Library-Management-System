@@ -93,9 +93,9 @@ model = {
     getBooksInfoByISBN: function (isbn, res) {
         var db = this.db;
 
-        db._find('books_info', {isbn: isbn})
+        db._find('books_info', {isbn: isbn}, {_id: 0})
             .then( (data) => {
-                this.formatData(data);
+                // this.formatData(data);
                 res.jsonp(data);
                 res.end();
             })
@@ -129,7 +129,7 @@ model = {
             }
         };
 
-        db._find('books_info', code_39)
+        db._find('books_info', code_39, {_id: 0})
             .then( (data) => {
                 /* this.getBookByISBN(data[0].isbn).then( (result) => {
                     data[0] = Object.assign(data[0] || {}, result);
@@ -138,7 +138,7 @@ model = {
                     res.jsonp(data);
                     res.end();
                 }) */
-                this.formatData(data);
+                // this.formatData(data);
                 res.jsonp(data);
                 res.end();
             })
@@ -190,7 +190,7 @@ model = {
 
     /**
      * 获取数据库中like排前10的数据
-     * @param 
+     * @param res - 响应参数
      */
     getHotTop10: function (res) {
         var db = this.db;
@@ -204,6 +204,150 @@ model = {
             .catch( (error) => {
                 console.log(error);
             })
+    },
+
+    /**
+     * 保存微信用户数据
+     */
+    saveUserInfo: function (req, res) {
+        // req.body
+        var db = this.db;
+        var ops = {};
+        db._find('wx_user', {openid: req.body.openid}, {_id: 0})
+            .then( data => {
+                // 判断该用户是否存在于数据库
+                if(data.length > 0) {    // 存在 将该条数据返回
+                    console.log('用户数据已存在！');
+                    res.jsonp(data);
+                    res.end();
+                }else {    // 不存在 插入该条数据
+                    db._insert('wx_user', req.body)
+                        .then( data => {
+                            console.log('新的数据插入成功！');
+                            this.formatData(data.ops);
+                            res.jsonp(data.ops[0]);
+                            res.end();
+                        })
+                        .catch( error => {
+                            console.log('insert error !');
+                        })
+                }
+            })
+            .catch( error => {
+                console.log('find data error !')
+            })
+        
+
+        /* db._insert('wx_user', req.body)
+            .then( data => {
+                console.log('insert success !')
+            })
+            .catch( error => {
+                console.log('insert error !');
+            }) */
+    },
+
+    /**
+     * 获取图书馆读者证权限
+     * @param accountInfo - 图书馆账号密码信息
+     * @param res - 响应参数
+     */
+    getAuth: function (accountInfo, res) {
+        var db = this.db;
+        var json1 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                openid: accountInfo.openid,
+                lib_auth: false
+            },
+            update: {   // 更新内容 field必须为update
+                $set: {
+                    lib_account: accountInfo.account,
+                    lib_password: accountInfo.password,
+                    lib_auth: true
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+        var json2 = {    // 读者证号密码
+            account: accountInfo.account,
+            password: accountInfo.password,
+            used: false
+        };
+        console.log(json2)
+        db._find('lib_user', json2, {_id: 0})
+            .then( data => {
+                console.log(data)
+                // 前端传过来的lib账号密码与数据库匹配
+                if(String(data[0]) == String(json2)) {
+                    db._findOneAndUpdate('wx_user', json1)
+                        .then( data => {
+                            console.log(data)
+                            console.log('匹配数据成功！');
+                            res.jsonp(data.value);
+                            res.end();
+                        })
+                        .catch( error => {
+                            console.log('findOneAndUpdate error: ');
+                            console.log(error);
+                        })
+                    db._update('lib_user', json2, {used: true}).then(data =>{});
+                }else {
+                    console.log('账号密码不匹配或账号已被使用');
+                    res.jsonp();
+                    res.end();
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            })
+    },
+
+    /**
+     * 取消图书馆读者证权限
+     * @param openid - 取消图书馆授权的微信用户
+     * @param res - 响应参数
+     */
+    cancelAuth: function (openid, res) {
+        var db = this.db;
+        var json1 = {
+            filter: {
+                openid: openid,
+                lib_auth: true
+            },
+            update: {
+                $set: {
+                    lib_auth: false
+                }
+            },
+            options: {
+                projection: {
+                    _id: 0
+                },
+                returnOriginal: false
+            }
+        };
+        var json2 = {};
+        db._findOneAndUpdate('wx_user', json1)
+            .then( data => {
+                json2 = {
+                    account: data.value.lib_account,
+                    password: data.value.lib_password,
+                    used: true
+                };
+                db._update('lib_user', json2, {used: false}).then(data =>{});
+                console.log('cancelAuth');
+                res.jsonp(data.value);
+                res.end();
+            })
+    },
+
+    loanBook: function (code, res) {
+
     }
 
 }

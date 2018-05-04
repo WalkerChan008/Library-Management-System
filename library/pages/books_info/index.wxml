@@ -72,7 +72,7 @@
                                   <view class="weui-cell__ft">{{ item.position }}</view>
                               </view>
                               <view class="loan-btn">
-                                <button class="weui-btn" type="primary">我要借书</button>
+                                <button id="{{ item.code_39 }}" class="weui-btn" type="primary" bindtap="toLoan">我要借书</button>
                               </view>
                             </block>
                         </view>

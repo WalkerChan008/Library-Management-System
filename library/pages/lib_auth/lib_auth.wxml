@@ -1,0 +1,32 @@
+<!--pages/lib_auth/lib_auth.wxml-->
+<view class="container">
+  <view class="login-icon">
+    <image class="login-img" src="../../images/usermenu/guet_lib.jpg"></image>
+  </view>
+  <view class="login-from">
+
+    <!--账号-->
+    <view class="inputView">
+      <image class="nameImage" src="../../images/usermenu/account.png"></image>
+      <label class="loginLab">账号</label>
+      <input class="inputText" placeholder="请输入账号" bindinput="accountInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_account : '' }}" />
+    </view>
+    <view class="line"></view>
+
+    <!--密码-->
+    <view class="inputView">
+      <image class="keyImage" src="../../images/usermenu/password.png"></image>
+      <label class="loginLab">密码</label>
+      <input class="inputText" placeholder="请输入密码" bindinput="passwordInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_password : '' }}" />
+    </view>
+
+    <!-- 提示 -->
+    <view class="weui-cells__tips">tips: 账号为学号，密码默认为生日八位数</view>
+
+    <!--按钮-->
+    <view class="loginBtnView">
+      <button wx:if="{{ !disabled }}" class="loginBtn" type="primary" bindtap="submit">提交</button>
+      <button wx:else class="loginBtn" type="warn" bindtap="cancel">取消认证</button>
+    </view>
+  </view>
+</view>
