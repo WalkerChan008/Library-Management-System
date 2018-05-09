@@ -1,16 +1,15 @@
 {
   "pages": [
-        "pages/search/index",
-        "pages/mine/mine",
-
-
-    "pages/books_list/index",
+    "pages/search/index",
+    "pages/mine/mine",
+    "pages/loan_book/loan_book",
+    "pages/return_book/return_book",
+    "pages/loan_history/loan_history",
     "pages/books_hot/hot",
+    "pages/books_list/index",
     "pages/books_info/index",
-
     "pages/lib_auth/lib_auth",
     "pages/myfavor/myfavor"
-    
   ],
   "window": {
     "navigationBarTextStyle": "white",

@@ -1,6 +1,33 @@
 /**
  * Created by WalkerChan on 2018/3/20.
  */
+
+/**
+ * 日期格式化
+ * @param {String} fmt - 格式化类型 yyyy-MM-dd
+ * @returns {String} 
+ */
+Date.prototype.format = function(fmt) { 
+    var o = { 
+       "M+" : this.getMonth()+1,                 //月份 
+       "d+" : this.getDate(),                    //日 
+       "h+" : this.getHours(),                   //小时 
+       "m+" : this.getMinutes(),                 //分 
+       "s+" : this.getSeconds(),                 //秒 
+       "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+       "S"  : this.getMilliseconds()             //毫秒 
+   }; 
+   if(/(y+)/.test(fmt)) {
+           fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+   }
+    for(var k in o) {
+       if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+   return fmt; 
+}
+
 model = {
     
     db: require('./mongodb.js'),
@@ -91,13 +118,31 @@ model = {
      * @param {Object} res - 通过res将数据传回前端
      */
     getBooksInfoByISBN: function (isbn, res) {
-        var db = this.db;
+        var db = this.db,
+            ops = [];
 
-        db._find('books_info', {isbn: isbn}, {_id: 0})
+        db._find('books_info', {isbn13: isbn}, {_id: 0})
             .then( (data) => {
+
+                if(String(data)) {
+                    this.formatData(data);
+                    res.jsonp(data);
+                    res.end();
+                } else {
+                    this.getBookByISBN(isbn).then( (result) => {
+                        console.log(result);
+                        db._insert('books_info', result)
+                            .then( data => {
+                                ops = data.ops;
+                                this.formatData(ops);
+                                console.log(ops);
+                                res.jsonp(ops);
+                                res.end();
+                            })
+                    })
+                }
                 // this.formatData(data);
-                res.jsonp(data);
-                res.end();
+
             })
             .catch( (error) => {
                 console.log(error);
@@ -206,6 +251,16 @@ model = {
             })
     },
 
+    getUserInfo: function (openid, res) {
+        var db = this.db;
+
+        db._find('wx_user', {openid: openid}, {_id: 0})
+            .then( data => {
+                res.jsonp(data[0]);
+                res.end();
+            })
+    },
+
     /**
      * 保存微信用户数据
      */
@@ -218,11 +273,13 @@ model = {
                 // 判断该用户是否存在于数据库
                 if(data.length > 0) {    // 存在 将该条数据返回
                     console.log('用户数据已存在！');
-                    res.jsonp(data);
+                    console.log(data)
+                    res.jsonp(data[0]);
                     res.end();
                 }else {    // 不存在 插入该条数据
                     db._insert('wx_user', req.body)
                         .then( data => {
+                            console.log(data.ops)
                             console.log('新的数据插入成功！');
                             this.formatData(data.ops);
                             res.jsonp(data.ops[0]);
@@ -346,8 +403,405 @@ model = {
             })
     },
 
-    loanBook: function (code, res) {
+    /**
+     * 图书详情借书接口
+     * @param query - 所借书本的code_39和借书人openid
+     * @param res - 响应参数
+     */
+    loanBook: function (query, res) {
+        var db = this.db;
 
+        var code = query.code,
+            openid = query.openid;
+
+        // 借书日期和还书日期以string类型插入数据库
+        var date = new Date(),
+            loanDate = new Date(date).format('yyyy-MM-dd'),
+            returnDate = new Date(date);
+        returnDate.setDate(date.getDate() + 30);
+        returnDate = new Date(returnDate).format('yyyy-MM-dd');
+
+        var json1 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                collection_info: {
+                    $elemMatch: {     // 查询内嵌文档
+                        code_39: code
+                    }
+                }
+            },
+            update: {   // 更新内容 field必须为update
+                $set: {
+                    'collection_info.$.state': '',
+                    'collection_info.$.loan_date': loanDate,
+                    'collection_info.$.return_date': returnDate,
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var json2 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                openid: openid
+            },
+            update: {   // 更新内容 field必须为update
+                $push: {
+                    loan_history: { code_39: code, is_rated: false },
+                    loan_book: code
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var updateBookInfo = db._findOneAndUpdate('books_info', json1),
+            updateUserInfo = db._findOneAndUpdate('wx_user', json2);
+
+        Promise.all([updateBookInfo, updateUserInfo])
+                .then( data => {
+                    res.jsonp(data);
+                    res.end();
+                })
+    },
+
+    /**
+     * 获取已借待还的书籍信息
+     * @param codeArr - 已借书籍条码号数组
+     * @param res - 响应参数
+     */
+    getLoanBookInfo: function (codeArr, res) {
+        var db = this.db;
+        var code_39 = {};
+        var LoanBookInfoArr = [];
+
+        codeArr = codeArr ? codeArr : [];
+
+        if(codeArr.length > 0) {  // 判断前端传的数组是否为空
+            codeArr.forEach(function (item, index) {  // 循环遍历code获取图书信息
+                code_39 = {
+                    'collection_info': {
+                        '$elemMatch': {     // 查询内嵌文档
+                            'code_39': item
+                        }
+                    }
+                };
+                db._find('books_info', code_39, {_id: 0})
+                    .then( (data) => {
+                        LoanBookInfoArr.push(data[0]);
+                        if((codeArr.length - 1) == index) {  // 循环遍历完成后将数据返回前端
+                            res.jsonp(LoanBookInfoArr);
+                            res.end();
+                        }
+                    })
+            })
+        } else {
+            console.log('getLoanBookInfo\'s codeArr is null');
+        }
+    },
+
+    /**
+     * 还书接口
+     * @param query - 已借书籍的用户和书籍code_39
+     * @param res - 响应参数
+     */
+    returnBook: function (query, res) {
+        var db = this.db;
+
+        var code = query.code,
+            openid = query.openid;
+
+        var json1 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                collection_info: {
+                    $elemMatch: {     // 查询内嵌文档
+                        code_39: code
+                    }
+                }
+            },
+            update: {   // 更新内容 field必须为update
+                $set: {
+                    'collection_info.$.state': 'collected',
+                    'collection_info.$.loan_date': '',
+                    'collection_info.$.return_date': '',
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var json2 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                openid: openid
+            },
+            update: {   // 更新内容 field必须为update
+
+                $pull: {
+                    loan_book: code
+                },
+                $push: {
+                    return_book: code
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var updateBookInfo = db._findOneAndUpdate('books_info', json1),
+            updateUserInfo = db._findOneAndUpdate('wx_user', json2);
+
+        Promise.all([updateBookInfo, updateUserInfo])
+                .then( data => {
+                    res.jsonp(data);
+                    res.end();
+                })
+    },
+
+    /**
+     * 获取已还待评价的书籍信息
+     * @param codeArr - 已借书籍条码号数组
+     * @param res - 响应参数
+     */
+    getReturnBookInfo: function (codeArr, res) {
+        var db = this.db;
+        var code_39 = {};
+        var returnBookInfoArr = [];
+
+        codeArr = codeArr ? codeArr : [];
+
+        if(codeArr.length > 0) {  // 判断前端传的数组是否为空
+            codeArr.forEach(function (item, index) {  // 循环遍历code获取图书信息
+                code_39 = {
+                    'collection_info': {
+                        '$elemMatch': {     // 查询内嵌文档
+                            'code_39': item
+                        }
+                    }
+                };
+                db._find('books_info', code_39, {_id: 0})
+                    .then( (data) => {
+                        returnBookInfoArr.push(data[0]);
+                        if((codeArr.length - 1) == index) {  // 循环遍历完成后将数据返回前端
+                            res.jsonp(returnBookInfoArr);
+                            res.end();
+                        }
+                    })
+            })
+        } else {
+            console.log('getReturnBookInfo\'s codeArr is null')
+        }
+    },
+
+    /**
+     * 点赞书籍接口
+     * @param query - 
+     * @param res - 响应参数
+     */
+    rateBook: function (query, res) {
+        var db = this.db;
+
+        var code = query.code,  // 该书本的code_39
+            rate = query.rate,  // 赞 or 踩
+            openid = query.openid;  // 评价人id
+
+        var addLike = (rate == 'like') ? 1 : 0;
+
+        var rateDate = new Date().format('yyyy-MM-dd'); // 评价时间
+
+        var json1 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                collection_info: {
+                    $elemMatch: {     // 查询内嵌文档
+                        code_39: code
+                    }
+                }
+            },
+            update: {   // 更新内容 field必须为update
+                $inc: {
+                    like: addLike
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var json2 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                loan_history: {
+                    $elemMatch: {     // 查询内嵌文档
+                        code_39: code,
+                        is_rated: false
+                    }
+                }
+            },
+            update: {   // 更新内容 field必须为update
+                $set: {
+                    'loan_history.$.rate': rate,
+                    'loan_history.$.is_rated': true,
+                    'loan_history.$.rate_date': rateDate
+                },
+                $pull: {
+                    return_book: code
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var updateBookInfo = db._findOneAndUpdate('books_info', json1),
+            updateUserInfo = db._findOneAndUpdate('wx_user', json2);
+
+        Promise.all([updateBookInfo, updateUserInfo])
+                .then( data => {
+                    res.jsonp(data);
+                    res.end();
+                })
+    },
+
+    /**
+     * 获取用户借阅历史书籍信息
+     * @param {Array} loanHistory - 借阅历史书籍的code数组
+     * @param res - 响应参数
+     */
+    getLoanHistoryInfo: function (loanHistory, res) {
+        var db = this.db;
+        var code_39 = {};
+        var loanHistoryArr = [];
+
+        loanHistory = loanHistory ? loanHistory : [];
+
+        if(loanHistory.length > 0) {  // 判断前端传的数组是否为空
+            loanHistory.forEach(function (item, index) {  // 循环遍历code获取图书信息
+                code_39 = {
+                    'collection_info': {
+                        '$elemMatch': {     // 查询内嵌文档
+                            'code_39': item.code_39
+                        }
+                    }
+                };
+                db._find('books_info', code_39, {_id: 0})
+                    .then( (data) => {
+                        loanHistoryArr.push(data[0]);
+                        if((loanHistory.length - 1) == index) {  // 循环遍历完成后将数据返回前端
+                            res.jsonp(loanHistoryArr);
+                            res.end();
+                        }
+                    })
+            })
+        }
+    },
+
+    /**
+     * 更改用户书籍收藏数据
+     * @param {Object} objFavor - 所需书籍
+     * @param res - 响应参数
+     */
+    changeFavor: function (objFavor, res) {
+        var db = this.db;
+
+        var openid = objFavor.openid,  // 用户标识ID
+            isbn = objFavor.isbn,  // 所收藏书籍的isbn
+            favorFlag = objFavor.favor_flag;  // 修改后的收藏标识
+
+        var json = {};
+
+        if(favorFlag) {  // 收藏
+            json = {   // 查找并更新条件
+                filter: {   // 查找条件 field必须为filter
+                    openid: openid
+                },
+                update: {   // 更新内容 field必须为update
+                    $push: {
+                        favor_book: isbn
+                    }
+                },
+                options: {   // 返回值选项 field必须为options
+                    projection: {   // 返回值筛选
+                        _id: 0
+                    },
+                    returnOriginal: false    // 返回更新后的数据
+                }
+            };
+        } else {  // 取消收藏
+            json = {   // 查找并更新条件
+                filter: {   // 查找条件 field必须为filter
+                    openid: openid
+                },
+                update: {   // 更新内容 field必须为update
+                    $pull: {
+                        favor_book: isbn
+                    }
+                },
+                options: {   // 返回值选项 field必须为options
+                    projection: {   // 返回值筛选
+                        _id: 0
+                    },
+                    returnOriginal: false    // 返回更新后的数据
+                }
+            };
+        }
+
+        db._findOneAndUpdate('wx_user', json)
+            .then( data => {
+                res.jsonp(data.value);
+                res.end();
+            })
+    },
+
+    /**
+     * 获取用户书籍收藏数据
+     * @param {Array} favorBookArr - 收藏书籍的isbn
+     * @param res - 响应参数
+     */
+    getFavorBook: function (favorBookArr, res) {
+        var db = this.db;
+
+        var dataArr = [];
+
+        favorBookArr = favorBookArr ? favorBookArr : [];
+
+        if(favorBookArr.length == 0) {  // 为空时返回空数组
+            res.jsonp(favorBookArr);
+            res.end();
+        }
+
+        favorBookArr.forEach( (item, index) => {
+            db._find('books_info', {isbn13: item}, {_id: 0})
+            .then( (data) => {
+                dataArr = dataArr.concat(data);
+                if(favorBookArr.length - 1 == index) {  // 循环遍历值最后一条再返回
+                    console.log(dataArr);
+                    res.jsonp(dataArr);
+                    res.end();
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+            })
+        })
     }
 
 }

@@ -1,18 +1,113 @@
 // pages/myfavor/myfavor.js
 Page({
 
+  url: require('../../config.js'),
+
   /**
    * 页面的初始数据
    */
   data: {
-  
+    wxUserInfo: {},
+    b_list: [],
+    list_count: 0
+  },
+
+  cancelFavor: function (e) {
+    var isbn = e.currentTarget.id,
+        wxUserInfo = {},
+        b_list = [],
+        favorBook = []
+    
+    wx.showModal({
+      title: '取消确认',
+      content: '您确认取消收藏此书吗？',
+      cancelText: '我在想想',
+      confirmText: '确认',
+      success: res => {
+        if(res.confirm) {
+          wx.request({
+            method: 'POST',
+            url: this.url + '/changeFavor',
+            data: {
+              openid: this.data.wxUserInfo.openid,
+              isbn: isbn,
+              favor_flag: false  // 修改为取消收藏
+            },
+            success: res => {
+              console.log(res.data)
+              wxUserInfo = res.data
+              favorBook = wxUserInfo.favor_book
+              favorBook = favorBook ? favorBook : []
+
+              wx.request({
+                method: 'POST',
+                url: this.url + '/getFavorBook',
+                data: favorBook,
+                success: res => {
+                  // res.data -> {Array} 书籍信息
+                  b_list = res.data
+                  console.log(res.data)
+
+                  this.setData({
+                    wxUserInfo: wxUserInfo,
+                    b_list: b_list,
+                    list_count: b_list.length
+                  })
+                }
+              })
+            }
+          })
+        }
+      }
+    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    var wxUserInfo = {},
+        b_list = [],
+        favorBook = []
+
+    wx.showToast({
+      title: '加载中',
+      icon: 'loading',
+      mask: true,
+      duration: 500,
+      success: res => {
+
+      }
+    })
+
+    setTimeout( () => {
+      wx.getStorage({
+        key: 'wxUserInfo',
+        success: res => {
+          wxUserInfo = res.data
+          favorBook = wxUserInfo.favor_book
+
+          console.log(res)
+          wx.request({
+            method: 'POST',
+            url: this.url + '/getFavorBook',
+            data: favorBook,
+            success: res => {
+              // res.data -> {Array}
+              b_list = res.data
+              console.log(res.data)
+
+              this.setData({
+                wxUserInfo: wxUserInfo,
+                b_list: b_list,
+                list_count: b_list.length
+              })
+            }
+          })
+        },
+      })
+    }, 500)
+
   },
 
   /**

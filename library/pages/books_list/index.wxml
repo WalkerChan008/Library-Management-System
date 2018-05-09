@@ -7,10 +7,10 @@
 
   <view class="list-wrap">
     <block wx:for="{{b_list}}" wx:key="*this">
-      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn }}">
+      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
         <view class="list-item">
           <image class="book-img" src="{{ item.images.large || item.image }}"></image>
-          <cover-view wx:if="{{ !item.callno }}">111</cover-view>
+          <cover-view wx:if="{{ !item.callno }}">未馆藏</cover-view>
           <view class="book-cont">
             <text class="book-title">{{ item.title }}</text>
             <text class="book-author" wx:for="{{ item.author }}" wx:key="*this">{{ item }}</text>

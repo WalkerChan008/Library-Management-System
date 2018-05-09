@@ -1,0 +1,25 @@
+<!--pages/loan_history/loan_history.wxml-->
+<view class="page">
+  <view class="list-count">
+    您一共借阅过<text> {{list_count}} </text>本书籍
+  </view>
+  <view class="line"></view>
+  <view class="list-wrap">
+    <block wx:for="{{b_list}}" wx:key="id"> 
+      <view class="list-item">
+        <view class="book-info">
+          <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+          <view class="book-cont">
+            <text class="book-title">{{ item.title }}</text>
+            <text class="date author">作者：{{ item.author }}</text>
+            <text class="date">索书号：{{ item.callno }}</text>
+            <text class="date">所给评价：{{ item.loan_history.rate == 'like' ? '赞' : '踩' }}</text>
+          </view>
+        </view>
+      </view>
+
+    </block> 
+    <!-- id="{{ item.loan_info.code_39 }}" -->
+
+  </view>
+</view>

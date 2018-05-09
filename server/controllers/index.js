@@ -24,6 +24,11 @@ router.get('/book_hot', function (req, res) {
     model.getHotTop10(res);
 });
 
+router.get('/getUserInfo', function (req, res) {
+    model.getUserInfo(req.query.openid, res);
+});
+
+
 router.post('/saveUserInfo', function (req, res) {
     model.saveUserInfo(req, res);
 });
@@ -44,9 +49,43 @@ router.get('/cancelAuth', function (req, res) {
 
 
 router.get('/loan_book', function (req, res) {
-    var code = req.query.b_code;
-    model.loanBook(code, res);
+    model.loanBook(req.query, res);
 });
+
+router.post('/getLoanBookInfo', function (req, res) {
+    var codeArr = req.body.codeArr;
+    model.getLoanBookInfo(codeArr, res);
+});
+
+router.get('/returnBook', function (req, res) {
+    model.returnBook(req.query, res);
+});
+
+router.post('/getReturnBookInfo', function (req, res) {
+    var codeArr = req.body.codeArr;
+    model.getReturnBookInfo(codeArr, res);
+});
+
+router.get('/rateBook', function (req, res) {
+    model.rateBook(req.query, res);
+    // console.log(req.query)
+});
+
+router.post('/getLoanHistoryInfo', function (req, res) {
+    var loanHistory = req.body.loanHistory;
+    model.getLoanHistoryInfo(loanHistory, res);
+});
+
+router.post('/changeFavor', function (req, res) {
+    var objFavor = req.body;
+    model.changeFavor(objFavor, res);
+});
+
+router.post('/getFavorBook', function (req, res) {
+    var favorBookArr = req.body;
+    model.getFavorBook(favorBookArr, res);
+});
+
 
 
 module.exports = router;

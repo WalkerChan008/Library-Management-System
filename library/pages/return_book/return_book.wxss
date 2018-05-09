@@ -1,4 +1,4 @@
-/* pages/myfavor/myfavor.wxss */
+/* pages/return_book/return_book.wxss */
 .page {
   height: 100vh;
   background-color: #f6f6f6;
@@ -42,9 +42,9 @@
 
 
 .book-info .book-img {
-  width: 220rpx;
-   max-width: 220rpx; 
-   height: 280rpx; 
+  width: 154rpx;
+  max-width: 27%;
+  height: 216rpx;
   background: url('https://img3.doubanio.com/lpic/s11117924.jpg') no-repeat; 
   background-size: contain;
 }
@@ -53,11 +53,12 @@
   display: flex;
   position: relative;
   flex-flow: column nowrap;
-  margin-left: 20rpx;
+  margin-left: 30rpx;
   width: 70%;
 }
 .book-info .book-cont .book-title {
-  font-size: 32rpx;
+  margin-bottom: 10rpx;
+  font-size: 36rpx;
   font-weight: bold;
   color: #424242;
   white-space: nowrap;
@@ -65,19 +66,55 @@
   text-overflow: ellipsis;
 }
 .book-info .book-cont .date {
-  /* display: -webkit-box; */
-  white-space: nowrap;
+  display: -webkit-box;
   text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   overflow: hidden;
-  font-size: 24rpx;
+  font-size: 30rpx;
   color: #aaa;
 }
 
-.cancel-btn {
-  position: absolute;
-  right: 20rpx;
-  bottom: 10rpx;
+.rate {
+  /* display: absolute; */
+  display: flex;
+  justify-content: space-around;
+  padding: 10rpx 0;
+  border-top: 2px solid #f6f6f6;
 }
-.cancel-btn button {
-  font-size: 24rpx;
+.like,
+.dislike {
+  padding: 5rpx 0rpx;
+  width: 140rpx;
+  border: 1px solid #cdcdcd;
+  border-radius: 10px;
+  text-align: center;
+}
+.like {
+  border: 1px solid #1b82d1;
+}
+.like text,
+.dislike text {
+  font-size: 28rpx;
+  color: #cdcdcd;
+}
+.like image,
+.dislike image {
+  width: 48rpx;
+  height: 48rpx;
+}
+.like image {
+  vertical-align: -12rpx;
+}
+.dislike image {
+  vertical-align: -14rpx;
+}
+
+.hover-rate {
+  /* background-color: #f6f6f6; */
+  background-color: #00c777;
+}
+
+.text-pink {
+  color: #1b82d1 !important;
 }

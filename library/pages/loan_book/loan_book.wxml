@@ -1,0 +1,24 @@
+<!--pages/loan_book/loan_book.wxml-->
+<!-- 已借书籍 待归还界面 -->
+<view class="page">
+  <view class="list-count">
+    您有<text> {{list_count}} </text>本书籍待归还
+  </view>
+  <view class="line"></view>
+  <view class="list-wrap">
+    <block wx:for="{{b_list}}" wx:key="id"> 
+      <view class="list-item">
+        <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+        <view class="book-cont">
+          <text class="book-title">{{ item.title }}</text>
+          <text class="date">条码号：{{ item.loan_info.code_39 }}</text>
+          <text class="date">借书日期：{{ item.loan_info.loan_date }}</text>
+          <text class="date">还书日期：{{ item.loan_info.return_date }}</text>
+          <view class="ret-btn">
+            <button id="{{ item.loan_info.code_39 }}" size="mini" type="primary" plain="true" bindtap="returnBook">还书</button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

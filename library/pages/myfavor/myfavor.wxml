@@ -1,26 +1,33 @@
 <!--pages/myfavor/myfavor.wxml-->
 <view class="page">
-  <view class="page__bd">
-    <view class="weui-panel__hd">共收藏了 {{ 0 }} 本书</view>
-    <view class="weui-panel__bd">
-      <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-              <image class="weui-media-box__thumb" src="{{icon60}}" />
+  <view class="list-count">
+    您一共收藏
+    <text> {{list_count}} </text>本书籍
+  </view>
+  <view class="line"></view>
+  <view class="list-wrap">
+    <block wx:for="{{b_list}}" wx:key="id">
+      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
+        <view class="list-item">
+          <view class="book-info">
+            <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+            <view class="book-cont">
+              <text class="book-title">{{ item.title }}</text>
+              <text class="date author">作者：{{ item.author }}</text>
+              <text class="date">出版社：{{ item.publisher }}</text>
+              <text class="date">出版日期：{{ item.pubdate }}</text>
+              <text class="date">索书号：{{ item.callno }}</text>
+              <text class="date">赞数：{{ item.like }}</text>
+              <text class="date">馆藏数量：{{ item.collection_info.length }}</text>
+            </view>
+            <view class="cancel-btn">
+              <button id="{{ item.isbn13 }}" size="mini" type="primary" plain="true" catchtap="cancelFavor">取消收藏</button>
+            </view>
           </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title">标题一</view>
-              <view class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</view>
-          </view>
+        </view>
       </navigator>
-      <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-              <image class="weui-media-box__thumb" src="{{icon60}}" />
-          </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title">标题一</view>
-              <view class="weui-media-box__desc">由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。</view>
-          </view>
-      </navigator>
-    </view>
+    </block>
+    <!-- id="{{ item.loan_info.code_39 }}" -->
+
   </view>
 </view>

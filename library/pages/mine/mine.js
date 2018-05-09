@@ -1,4 +1,5 @@
 // pages/mine/mine.js
+
 Page({
 
   url: require('../../config.js'),
@@ -9,13 +10,12 @@ Page({
   data: {
     wxUserInfo: {},
     wxAuth: false,
-    libAuth: false,
     menuitems: [
       { text: '读者认证', url: '../lib_auth/lib_auth', icon: '../../images/usermenu/stu_auth.png', tips: '' },
       { text: '个人收藏', url: '../myfavor/myfavor', icon: '../../images/usermenu/myfavor.png', tips: '' },
-      { text: '借阅历史', url: '../loan_book/loan_book?status=F', icon: '../../images/usermenu/loan_book.png', tips: '' },
-      { text: '待评价', url: '../borrowbook/loan_book?status=N', icon: '../../images/usermenu/evaluate.png', tips: '' },
-      { text: '待归还', url: '../borrowbook/loan_book?status=Y', icon: '../../images/usermenu/return.png', tips: '' },
+      { text: '借阅历史', url: '../loan_history/loan_history', icon: '../../images/usermenu/loan_book.png', tips: '' },
+      { text: '待评价', url: '../return_book/return_book', icon: '../../images/usermenu/evaluate.png', tips: '' },
+      { text: '待归还', url: '../loan_book/loan_book', icon: '../../images/usermenu/return.png', tips: '' },
       { text: '设置', url: '../setting/setting', icon: '../../images/usermenu/setting.png', tips: '' },
     ]
   },
@@ -38,26 +38,33 @@ Page({
               grant_type: 'authorization_code'
             },
             success: res => {
-              userInfo = Object.assign(res.data, e.detail.userInfo, { lib_auth: false });
-              console.log(userInfo);
+              // 数据库中无此条数据时插入
+              userInfo = Object.assign(res.data, e.detail.userInfo, { lib_auth: false })
               wx.request({
                 url: this.url + '/saveUserInfo',
                 method: 'POST',
                 data: userInfo,
                 success: res => {
+                  userInfo = res.data
+                  console.log(userInfo)
+                  wx.setStorage({
+                    key: 'wxUserInfo',
+                    data: userInfo,
+                  })
+
+                  this.setData({
+                    wxAuth: true,
+                    wxUserInfo: userInfo
+                  })
+
                   wx.showToast({
                     title: '授权成功',
                     icon: 'success',
-                    duration: 2000,
+                    duration: 1500,
                     mask: true
                   })
                 }
               })
-              wx.setStorage({
-                key: 'wxUserInfo',
-                data: userInfo,
-              })
-              this.setData({ wxAuth: true })
             }
           })
         }
@@ -75,17 +82,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.getStorage({
-      key: 'wxUserInfo',
-      success: res => {
-        console.log(res)
-        this.setData({
-          wxUserInfo: res.data,
-          wxAuth: res.data.openid ? true : false,
-          libAuth: res.data.lib_auth ? true : false
-        })
-      },
-    })
+
   },
 
   /**
@@ -103,11 +100,27 @@ Page({
       key: 'wxUserInfo',
       success: res => {
         console.log(res)
-        this.setData({
-          wxUserInfo: res.data,
-          wxAuth: res.data.openid ? true : false,
-          libAuth: res.data.lib_auth ? true : false
-        })
+        if (res) {
+          wx.request({
+            url: this.url + '/getUserInfo',
+            data: { openid: res.data.openid },
+            success: res => {
+              console.log(res);
+              this.setData({
+                wxUserInfo: res.data,
+                wxAuth: res.data.openid ? true : false
+              })
+
+              console.log(res.data)
+
+              wx.setStorage({
+                key: 'wxUserInfo',
+                data: res.data,
+              })
+            }
+          })
+        }
+
       },
     })
   },

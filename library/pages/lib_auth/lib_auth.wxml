@@ -9,7 +9,7 @@
     <view class="inputView">
       <image class="nameImage" src="../../images/usermenu/account.png"></image>
       <label class="loginLab">账号</label>
-      <input class="inputText" placeholder="请输入账号" bindinput="accountInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_account : '' }}" />
+      <input class="inputText" placeholder="请输入账号" confirm-type="next" bindinput="accountInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_account : '' }}" />
     </view>
     <view class="line"></view>
 
@@ -25,7 +25,7 @@
 
     <!--按钮-->
     <view class="loginBtnView">
-      <button wx:if="{{ !disabled }}" class="loginBtn" type="primary" bindtap="submit">提交</button>
+      <button wx:if="{{!disabled}}" class="loginBtn" type="primary" bindtap="submit">认证</button>
       <button wx:else class="loginBtn" type="warn" bindtap="cancel">取消认证</button>
     </view>
   </view>

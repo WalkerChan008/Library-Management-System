@@ -1,87 +1,102 @@
 <!--pages/books_info/index.wxml-->
 <view class="container">
 
-    <view class="book-img">
-      <view class="stats {{ b_info.callno ? 'hide' : '' }}">未馆藏</view>
-      <image mode="aspectFit" src="{{ b_info.images.large || b_info.image }}"></image>
-    </view>
+  <view class="book-img">
+    <view class="stats {{ b_info.callno ? 'hide' : '' }}">未馆藏</view>
+    <image mode="aspectFit" src="{{ b_info.images.large || b_info.image }}"></image>
+  </view>
 
-    <view class="book-box">
-      <text class="box-title">{{ b_info.title }}</text>
-      <view class="box-cont">
-        <view class="cont-info">
-          <text>作者：{{ b_info.author[0] }}</text>
-          <text>出版社：{{ b_info.publisher }}</text>
-          <text>出版时间：{{ b_info.pubdate }}</text>
-          <text>ISBN：{{ b_info.isbn13 }}</text>
-          <!-- <text>索书号：{{ b_info.callno || '无' }}</text> -->
-        </view>
-        <view class="cont-like">点赞</view>
+  <view class="book-box">
+    <text class="box-title">{{ b_info.title }}</text>
+    <view class="box-cont">
+      <view class="cont-info">
+        <text>作者：{{ b_info.author }}</text>
+        <text>出版社：{{ b_info.publisher }}</text>
+        <text>出版时间：{{ b_info.pubdate }}</text>
+        <text>ISBN：{{ b_info.isbn13 }}</text>
+      </view>
+      <view class="cont-like">点赞</view>
+    </view>
+  </view>
+
+
+    <view class="box-btn">
+      <view id="{{ b_info.isbn13 }}" class="favor" bindtap="addToFavor">
+        <image src="../../images/favor-{{ favor_flag ? 2 : 1 }}.png"></image>
+        <text>{{ favor_flag ? '已收藏' : '收藏' }}</text>
+      </view>
+      <view class="share">
+        <image src="../../images/share.png"></image>
+        <text>分享</text>
+        <button open-type="share"></button>
       </view>
     </view>
 
-    <!-- 简介 start -->
-    <view class="book-box">
-      <text class="box-title">简介</text>
-      <text class="brief-cont {{isFold ? 'fold' : ''}}">{{ b_info.summary }}</text>
-      <view class="icon-wrap" bindtap="iconTap">
-        <image class="icon-arrow {{isFold ? '' : 'hide'}}" mode="widthFix" src="../../images/arrow-down.png"></image>
-        <image class="icon-arrow {{isFold ? 'hide' : ''}}" mode="widthFix" src="../../images/arrow-up.png"></image>
-      </view>
+  <!-- 简介 start -->
+  <view class="book-box">
+    <text class="box-title">简介</text>
+    <text class="brief-cont {{isFold ? 'fold' : ''}}">{{ b_info.summary }}</text>
+    <view class="icon-wrap" bindtap="iconTap">
+      <image class="icon-arrow {{isFold ? '' : 'hide'}}" mode="widthFix" src="../../images/arrow-down.png"></image>
+      <image class="icon-arrow {{isFold ? 'hide' : ''}}" mode="widthFix" src="../../images/arrow-up.png"></image>
     </view>
-    <!-- 简介 end -->
+  </view>
+  <!-- 简介 end -->
 
-    <!-- 折叠列表 start -->
-    <view class="book-box">
-      <text class="box-title">馆藏信息</text>
-      <view class="kind-list">
-          <block wx:for="{{list}}" wx:key="id">
-              <view class="kind-list__item">
-                  <view id="{{item.code_39}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
-                      <view class="weui-flex__item">{{item.situs}}</view>
-                      <image class="kind-list__img" src=""></image>
+  <!-- 折叠列表 start -->
+  <view class="book-box">
+    <text class="box-title">馆藏信息</text>
+    <view wx:if="{{ b_info.callno }}" class="kind-list">
+      <block wx:for="{{list}}" wx:key="id">
+        <view class="kind-list__item">
+          <view id="{{item.code_39}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
+            <view class="weui-flex__item">{{item.situs}}</view>
+            <image class="kind-list__img" src=""></image>
+          </view>
+          <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
+            <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
+              <view class="weui-cells_after-title">
+                <view class="weui-cell">
+                  <view class="weui-cell__bd">索书号</view>
+                  <view class="weui-cell__ft">{{ b_info.callno }}</view>
+                </view>
+                <view class="weui-cell">
+                  <view class="weui-cell__bd">条码号</view>
+                  <view class="weui-cell__ft">{{ item.code_39 }}</view>
+                </view>
+                <view class="weui-cell">
+                  <view class="weui-cell__bd">馆藏状态</view>
+                  <view class="weui-cell__ft">{{ item.state ? '馆藏中' : '已借出' }}</view>
+                </view>
+                <block wx:if="{{ item.loan_date }}">
+                  <view class="weui-cell">
+                    <view class="weui-cell__bd">借出时间</view>
+                    <view class="weui-cell__ft">{{ item.loan_date }}</view>
                   </view>
-                  <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
-                      <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
-                        <view class="weui-cells_after-title">
-                            <view class="weui-cell">
-                                <view class="weui-cell__bd">索书号</view>
-                                <view class="weui-cell__ft">{{ b_info.callno }}</view>
-                            </view>
-                            <view class="weui-cell">
-                                <view class="weui-cell__bd">条码号</view>
-                                <view class="weui-cell__ft">{{ item.code_39 }}</view>
-                            </view>
-                            <view class="weui-cell">
-                                <view class="weui-cell__bd">馆藏状态</view>
-                                <view class="weui-cell__ft">{{ item.state ? '馆藏中' : '已借出' }}</view>
-                            </view>
-                            <block wx:if="{{ item.loan_date }}">
-                              <view class="weui-cell">
-                                  <view class="weui-cell__bd">借出时间</view>
-                                  <view class="weui-cell__ft">{{ item.loan_date }}</view>
-                              </view>
-                              <view class="weui-cell">
-                                  <view class="weui-cell__bd">应还时间</view>
-                                  <view class="weui-cell__ft">{{ item.return_date }}</view>
-                              </view>
-                            </block>
-                            <block wx:if="{{ !item.loan_date }}">
-                              <view class="weui-cell">
-                                  <view class="weui-cell__bd">图书定位</view>
-                                  <view class="weui-cell__ft">{{ item.position }}</view>
-                              </view>
-                              <view class="loan-btn">
-                                <button id="{{ item.code_39 }}" class="weui-btn" type="primary" bindtap="toLoan">我要借书</button>
-                              </view>
-                            </block>
-                        </view>
-                      </view>
+                  <view class="weui-cell">
+                    <view class="weui-cell__bd">应还时间</view>
+                    <view class="weui-cell__ft">{{ item.return_date }}</view>
                   </view>
+                </block>
+                <block wx:if="{{ !item.loan_date }}">
+                  <view class="weui-cell">
+                    <view class="weui-cell__bd">图书定位</view>
+                    <view class="weui-cell__ft">{{ item.position }}</view>
+                  </view>
+                  <view class="loan-btn">
+                    <button id="{{ item.code_39 }}" class="weui-btn" type="primary" bindtap="toLoan">我要借书</button>
+                  </view>
+                </block>
               </view>
-          </block>
-      </view>
+            </view>
+          </view>
+        </view>
+      </block>
     </view>
-    <!-- 折叠列表 end -->
+    <view wx:else>推荐购买</view>
+  </view>
+  <!-- 折叠列表 end -->
+
+  <view class="fill"></view>
 
 </view>

@@ -8,6 +8,7 @@ Page({
    */
   data: {
     wxUserInfo: {},
+    wxAuth: false,
     disabled: '',
     account: '',
     password: '',
@@ -34,7 +35,7 @@ Page({
       wx.showToast({
         title: '用户名和密码不能为空',
         icon: 'none',
-        duration: 2000
+        duration: 1500
       })
     } else {
       // 这里修改成跳转的页面
@@ -67,14 +68,14 @@ Page({
             wx.showToast({
               title: '认证成功',
               icon: 'success',
-              duration: 2000,
+              duration: 1500,
               success: res => {
                 setTimeout(() => {
                   this.setData({
                     disabled: 'disabled',
                     wxUserInfo: wxUserInfo
                   })
-                }, 2000)
+                }, 1500)
               }
             })
 
@@ -82,7 +83,7 @@ Page({
             // wx.showToast({    
             //   title: '认证失败',
             //   icon: 'none',
-            //   duration: 2000
+            //   duration: 1500
             // })
             wx.showModal({
               title: '认证失败',
@@ -92,8 +93,8 @@ Page({
           }
         }
       })
-
     }
+    
   },
 
   // 取消认证
@@ -113,6 +114,7 @@ Page({
             },
             success: res => {
               var wxUserInfo = res.data
+              console.log(res)
               wx.setStorage({
                 key: 'wxUserInfo',
                 data: wxUserInfo,
@@ -123,14 +125,16 @@ Page({
               wx.showToast({
                 title: '认证已取消',
                 icon: 'success',
-                duration: 2000,
+                duration: 1500,
                 success: res => {
                   setTimeout(() => {
                     this.setData({
                       disabled: '',
-                      wxUserInfo: wxUserInfo
+                      wxUserInfo: wxUserInfo,
+                      account: '',
+                      password: ''
                     })
-                  }, 2000)
+                  }, 1500)
                 }
               })
             }
@@ -144,17 +148,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.getStorage({
-      key: 'wxUserInfo',
-      success: (res) => {
-        var disabled = res.data.lib_auth ? 'disabled' : ''
-        console.log(disabled)
-        this.setData({
-          wxUserInfo: res.data,
-          disabled: disabled
-        })
-      },
-    })
+
   },
 
   /**
@@ -168,7 +162,20 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    wx.getStorage({
+      key: 'wxUserInfo',
+      success: (res) => {
+        var disabled = res.data.lib_auth ? 'disabled' : '',
+            wxAuth = res.data ? true : false
+        console.log(wxAuth)
+        console.log(disabled)
+        this.setData({
+          wxUserInfo: res.data,
+          wxAuth: wxAuth,
+          disabled: disabled
+        })
+      },
+    })
   },
 
   /**

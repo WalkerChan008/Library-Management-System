@@ -13,7 +13,7 @@
   padding: 10rpx 20rpx;
   font-size: 26rpx;
   color: #fff;
-  background: #ddd;
+  background: #999;
 }
 .book-img image {
   width: 250rpx; 
@@ -25,6 +25,9 @@
   flex-direction: column;
   padding: 40rpx;
   border-bottom: 6rpx solid #eee;
+}
+.book-box:nth-last-of-type(2) {
+  border: none;
 }
 .box-title {
   height: 100rpx;
@@ -54,6 +57,60 @@
   border: 1px solid #ddd;
 }
 
+.box-btn {
+  position: fixed;
+  display: flex;
+  justify-content: space-around;
+  bottom: 0;
+  width: 100vw;
+  max-height: 100rpx;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.box-btn .favor,
+.box-btn .share {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+   align-items: center;
+   padding: 8rpx 0;   
+  width: 50vw;
+  box-sizing: border-box;
+}
+.box-btn .favor {
+  border-right: 1px solid #ccc;
+}
+.box-btn .share {
+  position: relative;
+}
+.box-btn .favor image,
+.box-btn .share image {
+  width: 48rpx;
+  height: 48rpx;
+}
+.box-btn .favor text,
+.box-btn .share text {
+  font-size: 24rpx;
+}
+.box-btn .favor text {
+  color: #d81e06;
+}
+.box-btn .share text {
+  color: #1b82d1;
+}
+.box-btn .share button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+.box-btn .share button::after {
+   border: none; 
+}
+
+
+
 /* 简介 */
 .box-title {
   height: 80rpx;
@@ -62,6 +119,7 @@
   color: #000;
 }
 .brief-cont {
+  word-break: break-all;
   font-size: 30rpx;
   text-indent: 2em;
   color: #000;
@@ -89,4 +147,8 @@
 .loan-btn {
   margin-top: 10px;
   padding: 10px 15px;
+}
+
+.fill {
+  height: 100rpx;
 }

@@ -1,0 +1,36 @@
+<!--pages/return_book/return_book.wxml-->
+<!-- 已还书籍 待评价界面 -->
+<view class="page">
+  <view class="list-count">
+    您有<text> {{list_count}} </text>本书籍待评价
+  </view>
+  <view class="line"></view>
+  <view class="list-wrap">
+    <block wx:for="{{b_list}}" wx:key="id">
+      <view class="list-item">
+        <view class="book-info">
+          <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+          <view class="book-cont">
+            <text class="book-title">{{ item.title }}</text>
+            <text class="date">条码号：{{ item.return_info.code_39 }}</text>
+            <text class="date">索书号：{{ item.callno }}</text>
+            <text class="date">已赞数：{{ item.like }}</text>
+          </view>
+        </view>
+        <view class="rate">
+          <view id="{{ item.return_info.code_39 + '-like' }}" class="like" hover-class="hover-rate" bindtap="chooseThis">
+            <text class="text-pink">点赞</text>
+            <image src="../../images/usermenu/like.png"></image>
+          </view>
+          <view id="{{ item.return_info.code_39 + '-dislike' }}" class="dislike" hover-class="hover-rate" bindtap="chooseThis">
+            <text>踩</text>
+            <image src="../../images/usermenu/dislike-1.png"></image>
+          </view>
+        </view>
+      </view>
+
+    </block>
+    <!-- id="{{ item.loan_info.code_39 }}" -->
+
+  </view>
+</view>

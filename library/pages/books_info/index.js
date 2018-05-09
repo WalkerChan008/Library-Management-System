@@ -9,19 +9,11 @@ Page({
    * 页面的初始数据
    */
   data: {
+    wxUserInfo: {},
     isFold: true,    // 简介展开按钮
     b_info : {},    // 图书信息
-    list: [    // 馆藏信息列表
-      {
-        "code_39": "1659877",
-        "situs": "花江图书馆一楼B库",
-        "position": "22排A面3列4行",
-        "open": false,
-        "state": "collected",
-        "loan_date": "",
-        "return_date": ""
-      }
-    ]
+    list: [],      // 馆藏信息列表
+    favor_flag: false  // 是否收藏此书
   },
 
   /**
@@ -51,53 +43,172 @@ Page({
     });
   },
 
+  /**
+   * 我要借书
+   * @param e - 事件源对象
+   */
   toLoan: function (e) {
-    var code_39 = e.currentTarget.id
-    wx.showModal({
-      title: '确认借书',
-      content: '您确定借阅《' + this.data.b_info.title + '》？',
-      success: (res) => {
-        if(res.confirm) {
-          wx.request({
-            url: this.url + '/loan_book?b_code=' + code_39,
-            success: (res) => {
-              console.log(res)
-            }
-          })
+    var code_39 = e.currentTarget.id,  // 获取图书馆图书条码号
+        wxUserInfo = this.data.wxUserInfo,
+        libAuth = wxUserInfo.lib_auth
+    if(libAuth) {
+      wx.showModal({
+        title: '确认借书',
+        content: '您确定借阅《' + this.data.b_info.title + '》？',
+        success: (res) => {
+          if(res.confirm) {
+            wx.request({
+              url: this.url + '/loan_book',
+              data: {
+                code: code_39,
+                openid: this.data.wxUserInfo.openid
+              },
+              success: (res) => {
+                console.log(res)
+                // res.data[0].value -> books_info
+                // res.data[1].value -> wxUserInfo
+                this.setData({  // 将更新后的图书信息存入data中
+                  wxUserInfo: res.data[1].value,
+                  b_info: res.data[0].value,
+                  list: res.data[0].value.collection_info
+                });
+                wx.setStorage({  // 将更新后的用户信息存入缓存中
+                  key: 'wxUserInfo',
+                  data: res.data[1].value
+                })
+              }
+            })
+          }
+          console.log(res)
         }
-        console.log(res)
+      })
+    } else {
+      wx.showModal({
+        title: '借书失败',
+        content: '未进行图书馆读者认证。是否前往认证？',
+        success: res => {
+          if(res.confirm) {
+            if (wxUserInfo.openid) {  // 判断是否已登录
+              wx.navigateTo({
+                url: '../lib_auth/lib_auth',
+              })
+            } else {
+              wx.reLaunch({
+                url: '../mine/mine',
+              })
+            }
+          }
+        }
+      })
+    }
+  },
+
+  /**
+   * 添加书籍到我的收藏
+   * @param e - 事件源对象
+   */
+  addToFavor: function (e) {
+    var wxUserInfo = {}
+
+    var isbn = e.currentTarget.id,
+        favor_flag = this.data.favor_flag  // 初始收藏状态
+
+    console.log(favor_flag)
+
+    favor_flag = favor_flag ? false : true  // 点击后变成的状态
+
+    console.log(favor_flag)
+    if (favor_flag) {    // 点击收藏时
+      wx.showToast({
+        title: '收藏成功',
+        icon: 'success',
+        mask: true
+      })
+    }else {
+      wx.showToast({
+        title: '已取消收藏',
+        icon: 'success',
+        mask: true
+      })
+    }
+
+    wx.request({
+      method: 'POST',
+      url: this.url + '/changeFavor',
+      data: {
+        openid: this.data.wxUserInfo.openid,
+        isbn: isbn,
+        favor_flag: favor_flag  // 需要修改成为的状态
+      },
+      success: res => {
+        wxUserInfo = res.data
+
+        this.setData({
+          wxUserInfo: wxUserInfo,
+          favor_flag: favor_flag
+        })
+
+        console.log(wxUserInfo)
+
+        wx.setStorage({
+          key: 'wxUserInfo',
+          data: wxUserInfo,
+        })
       }
     })
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.getStorage({
-      key: 'libAuth',
-      success: (res) => {
-        console.log(res)
-      },
-    })
-    // wx.showLoading({
-    //   title: '加载中',
-    //   icon: 'loading',
-    //   mask: true
-    // })
-    codeQuery = options
+    var b_info = {},
+        list = [],
+        isbn = ''
+
+    console.log(isbn)
+
+    var wxUserInfo = {},
+      favorBook = [],
+      favor_flag = false
+
+    codeQuery = options  // {OBJECT} 码的类型 & 条码号
     wx.request({    // 向后台发起请求，获取图书信息数据
       url: this.url + '/' + codeQuery.code_type + '_search?' + codeQuery.code_type + '=' + codeQuery.result,
-      success: (data) => {
-        var b_info = data.data[0],
-            list = b_info.collection_info;
-            
-        console.log(b_info);
+      success: (res) => {
+        b_info = res.data[0],
+        list = b_info.collection_info || [];
+        isbn = b_info.isbn13
 
-        this.setData({ 
-          b_info: b_info,
-          list: list
-        });
+        console.log(isbn);
+
+        wx.getStorage({
+          key: 'wxUserInfo',
+          success: (res) => {
+            wxUserInfo = res.data
+            favorBook = wxUserInfo.favor_book
+            favorBook = favorBook ? favorBook : []
+
+            favorBook.forEach((item, index) => {  // 循环遍历 为true时显示已收藏
+              console.log(item)
+
+              if(favor_flag) {  // 为true时跳出循环
+                return false
+              }
+
+              favor_flag = (item == isbn) ? true : false
+            })
+
+            console.log(res.data)
+            this.setData({
+              wxUserInfo: wxUserInfo,
+              b_info: b_info,
+              list: list,
+              favor_flag: favor_flag
+            })
+          },
+        })
       }
     })
   },
@@ -113,12 +224,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    wx.getStorage({
-      key: 'libAuth',
-      success: (res) => {
-        console.log(res)
-      },
-    })
+
+
+
   },
 
   /**
@@ -132,7 +240,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    console.log('onUnload')
   },
 
   /**
