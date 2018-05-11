@@ -8,14 +8,16 @@
 /* 排行榜1 */
 .hot-head {
   padding: 20px 20px 0;
+  color: #fff;
   background-color: #1b82d1;
   /* border-bottom: 1px solid #ccc; */
-  box-shadow: 0 0 20px 1px #ccc;
+  box-shadow: 0 0 20px 1px #1b82d1;
   /* height: 200rpx; */
 }
 .hot-head .hot-title {
   font-weight: bold;
   text-align: center;
+  font-size: 36rpx;
 }
 .weui-flex {
   padding: 30px;
@@ -26,7 +28,7 @@
   display: flex;
   align-items: flex-end;
 }
-.weui-flex .hot-des text {
+.weui-flex .hot-des .number1 {
   font-size: 40rpx;
   font-weight: bold;
 }
@@ -47,7 +49,7 @@
 
 /* 排行榜2-10 */
 .hot-body {
-  padding: 20px 0;
+  padding: 10px 0 20px;
 }
 .rank-list {
   display: flex;

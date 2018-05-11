@@ -34,6 +34,16 @@
           <view class="weui-cell__ft weui-cell__ft_in-access">{{item.tips}}</view>
         </navigator>
       </block>
+
+      <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" bindtap="setting">
+          <view class="weui-cell__hd">
+            <image src="../../images/usermenu/setting.png"></image>
+          </view>
+          <view class="weui-cell__bd">设置</view>
+          <!-- <view class="weui-badge" style="margin-left: 5px;">8</view> -->
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+
     </view>
   </view>
 </view>

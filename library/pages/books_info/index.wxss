@@ -52,9 +52,21 @@
   overflow: hidden;
 }
 .box-cont .cont-like {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 160rpx;
   height: 160rpx;
   border: 1px solid #ddd;
+}
+.box-cont .cont-like .num {
+  font-size: 45rpx;
+  font-weight: bold;
+  color: #424242;
+}
+.box-cont .cont-like .text {
+  font-size: 24rpx;
 }
 
 .box-btn {
@@ -67,6 +79,7 @@
   background-color: #fff;
   border-top: 1px solid #ccc;
   box-sizing: border-box;
+  z-index: 1001;
 }
 .box-btn .favor,
 .box-btn .share {
@@ -147,6 +160,15 @@
 .loan-btn {
   margin-top: 10px;
   padding: 10px 15px;
+}
+
+.command {
+  font-size: 30rpx;
+}
+.command text {
+  font-size: 32rpx;
+  /* font-weight: bold; */
+  color: #1b82d1;
 }
 
 .fill {

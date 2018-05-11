@@ -22,11 +22,22 @@ Page({
     ]
   },
 
+  imageLoad: function () {
+    setTimeout( () => {
+      wx.hideLoading()
+    }, 500)
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+
   },
 
   /**
@@ -54,6 +65,7 @@ Page({
           top1: top1,
           rank_list: rank_list
         })
+
       }
     })
   },

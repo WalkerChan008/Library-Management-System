@@ -112,9 +112,9 @@
 
 .hover-rate {
   /* background-color: #f6f6f6; */
-  background-color: #00c777;
+  background-color: #ddd;
 }
 
-.text-pink {
+.text-blue {
   color: #1b82d1 !important;
 }

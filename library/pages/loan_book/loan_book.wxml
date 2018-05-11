@@ -8,7 +8,7 @@
   <view class="list-wrap">
     <block wx:for="{{b_list}}" wx:key="id"> 
       <view class="list-item">
-        <image class="book-img" src="{{ item.images.large || item.image }}"></image>
+        <image class="book-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
         <view class="book-cont">
           <text class="book-title">{{ item.title }}</text>
           <text class="date">条码号：{{ item.loan_info.code_39 }}</text>

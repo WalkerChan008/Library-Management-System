@@ -120,11 +120,13 @@ model = {
     getBooksInfoByISBN: function (isbn, res) {
         var db = this.db,
             ops = [];
-
+       
         db._find('books_info', {isbn13: isbn}, {_id: 0})
             .then( (data) => {
 
                 if(String(data)) {
+                    console.log('cnmb')
+                    console.log(data)
                     this.formatData(data);
                     res.jsonp(data);
                     res.end();
@@ -574,7 +576,7 @@ model = {
 
     /**
      * 获取已还待评价的书籍信息
-     * @param codeArr - 已借书籍条码号数组
+     * @param {Array} codeArr - 已借书籍条码号数组
      * @param res - 响应参数
      */
     getReturnBookInfo: function (codeArr, res) {
@@ -609,7 +611,7 @@ model = {
 
     /**
      * 点赞书籍接口
-     * @param query - 
+     * @param {Object} query - 
      * @param res - 响应参数
      */
     rateBook: function (query, res) {
@@ -688,8 +690,16 @@ model = {
      */
     getLoanHistoryInfo: function (loanHistory, res) {
         var db = this.db;
-        var code_39 = {};
+
         var loanHistoryArr = [];
+
+        /* var json = {
+            collection_info: {
+                $elemMatch: {     // 查询内嵌文档
+                    code_39: item.code_39
+                }
+            }
+        }; */
 
         loanHistory = loanHistory ? loanHistory : [];
 
@@ -779,31 +789,75 @@ model = {
     getFavorBook: function (favorBookArr, res) {
         var db = this.db;
 
-        var dataArr = [];
+        var json = {  // 批量查询
+            isbn13: {
+                $in: favorBookArr
+            }
+        };
 
         favorBookArr = favorBookArr ? favorBookArr : [];
 
         if(favorBookArr.length == 0) {  // 为空时返回空数组
             res.jsonp(favorBookArr);
             res.end();
-        }
-
-        favorBookArr.forEach( (item, index) => {
-            db._find('books_info', {isbn13: item}, {_id: 0})
-            .then( (data) => {
-                dataArr = dataArr.concat(data);
-                if(favorBookArr.length - 1 == index) {  // 循环遍历值最后一条再返回
-                    console.log(dataArr);
-                    res.jsonp(dataArr);
+        } else {
+            db._find('books_info', json, {_id: 0})
+                .then( (data) => {
+                    res.jsonp(data);
                     res.end();
-                }
-            })
-            .catch( (error) => {
-                console.log(error);
-            })
-        })
-    }
+                })
+        }
+    },
 
+    command: function (data, res) {
+        var db = this.db;
+
+        var isbn = data.isbn,
+            openid = data.openid;
+
+        var json1 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                isbn13: isbn
+            },
+            update: {   // 更新内容 field必须为update
+                $inc: {
+                    command: 1
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var json2 = {   // 查找并更新条件
+            filter: {   // 查找条件 field必须为filter
+                openid: openid
+            },
+            update: {   // 更新内容 field必须为update
+                $push: {
+                    command: isbn
+                }
+            },
+            options: {   // 返回值选项 field必须为options
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        };
+
+        var updateBookInfo = db._findOneAndUpdate('books_info', json1),
+            updateUserInfo = db._findOneAndUpdate('wx_user', json2);
+
+        Promise.all([updateBookInfo, updateUserInfo])
+            .then( data => {
+                res.jsonp(data);
+                res.end();
+            })
+    }
 }
 
 module.exports = model;

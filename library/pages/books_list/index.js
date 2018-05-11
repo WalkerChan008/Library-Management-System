@@ -11,6 +11,16 @@ Page({
     b_list: []
   },
 
+  imageLoad: function () {
+    setTimeout( () => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '加载成功',
+        duration: 1000
+      })
+    }, 500)
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -35,7 +45,6 @@ Page({
           b_list: b_list
         })
 
-        wx.hideLoading()
       }
     })
   },

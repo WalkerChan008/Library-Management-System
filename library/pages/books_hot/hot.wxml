@@ -1,12 +1,12 @@
 <!--pages/books_hot/hot.wxml-->
 <view class="container">
-  <navigator url="../books_info/index?code_type=isbn&result={{ top1.isbn }}">
+  <navigator url="../books_info/index?code_type=isbn&result={{ top1.isbn13 }}">
     <view class="hot-head">
       <view class="hot-title three-point">{{ top1.title }}</view>
       <view class="weui-flex">
-        <view class="hot-des"><text>1</text>st</view>
+        <view class="hot-des"><text class="number1">1</text>st</view>
         <view class="weui-flex__item">
-          <image class="hot-book-img" src="{{ top1.images.large || top1.image }}"></image>
+          <image class="hot-book-img" src="{{ top1.images.large || top1.image }}" bindload="imageLoad"></image>
         </view>
         <view class="hot-des">{{ top1.like }}赞</view>
       </view>
@@ -14,10 +14,10 @@
   </navigator>
   <view class="hot-body">
     <block wx:for="{{rank_list}}" wx:key="id">
-      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn }}">
+      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
         <view class="rank-list">
           <view class="rank-num">{{ index + 2 }}</view>
-          <image class="rank-img" src="{{ item.images.large || item.image }}"></image>
+          <image class="rank-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
           <view class="rank-title"><view class=" three-point">{{ item.title }}</view></view>
           <view class="rank-like">{{ item.like }}赞</view>
         </view>

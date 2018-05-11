@@ -17,7 +17,7 @@
     <view class="inputView">
       <image class="keyImage" src="../../images/usermenu/password.png"></image>
       <label class="loginLab">密码</label>
-      <input class="inputText" placeholder="请输入密码" bindinput="passwordInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_password : '' }}" />
+      <input class="inputText" password="true" placeholder="请输入密码" bindinput="passwordInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_password : '' }}" />
     </view>
 
     <!-- 提示 -->

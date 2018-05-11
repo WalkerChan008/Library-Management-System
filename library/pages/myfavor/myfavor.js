@@ -25,6 +25,11 @@ Page({
       confirmText: '确认',
       success: res => {
         if(res.confirm) {
+          wx.showToast({
+            title: '取消成功',
+            mask: true,
+            duration: 1000
+          })
           wx.request({
             method: 'POST',
             url: this.url + '/changeFavor',
@@ -62,6 +67,12 @@ Page({
     })
   },
 
+  imageLoad: function () {
+    setTimeout( () => {
+      wx.hideLoading()
+    }, 500)
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -70,24 +81,28 @@ Page({
         b_list = [],
         favorBook = []
 
-    wx.showToast({
+    // wx.showToast({
+    //   title: '加载中',
+    //   icon: 'loading',
+    //   mask: true,
+    //   duration: 500
+    // })
+    wx.showLoading({
       title: '加载中',
-      icon: 'loading',
-      mask: true,
-      duration: 500,
-      success: res => {
-
-      }
+      mask: true
     })
 
-    setTimeout( () => {
-      wx.getStorage({
-        key: 'wxUserInfo',
-        success: res => {
-          wxUserInfo = res.data
-          favorBook = wxUserInfo.favor_book
+    wx.getStorage({
+      key: 'wxUserInfo',
+      success: res => {
+        wxUserInfo = res.data
+        favorBook = wxUserInfo.favor_book || []
+        // favorBook = favorBook ? favorBook : []
 
-          console.log(res)
+        console.log(res)
+
+        if(favorBook.length > 0) {
+
           wx.request({
             method: 'POST',
             url: this.url + '/getFavorBook',
@@ -102,11 +117,20 @@ Page({
                 b_list: b_list,
                 list_count: b_list.length
               })
+
             }
           })
-        },
-      })
-    }, 500)
+
+        }else {
+
+          setTimeout(() => {
+            wx.hideLoading()
+          }, 500)
+
+        }
+      },
+    })
+
 
   },
 

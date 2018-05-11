@@ -17,45 +17,73 @@ Page({
     list_count: 0
   },
 
+  imageLoad: function () {
+    setTimeout(() => {
+      wx.hideLoading()
+    }, 500)
+  },
+
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var b_list = [],
       loan_history = []
+
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+
     wx.getStorage({  // 从缓存中读取用户信息
       key: 'wxUserInfo',
       success: res => {
         console.log(res.data.loan_history)
-        loan_history = res.data.loan_history
-        loan_history = loan_history ? loan_history : []
+        loan_history = res.data.loan_history || []
+        // loan_history = loan_history ? loan_history : []
 
         // 未完成借书归还评价流程 借阅历史不展示
         loan_history.forEach( (item, index) => {
           item.is_rated ? '' : loan_history.remove(index)
         })
 
+        console.log(loan_history);
+
         this.setData({
           wxUserInfo: res.data,
-          list_count: loan_history.length
+          // list_count: loan_history.length
         })
 
-        wx.request({
-          method: 'POST',
-          url: this.url + '/getLoanHistoryInfo',
-          data: { loanHistory: loan_history },  // 用户已还未评价书籍的数组
-          success: res => {
-            // res.data {Array} - 后台返回的已还未评价的书籍信息
-            b_list = res.data
-            b_list.forEach((item, index) => {  // 遍历图书信息数组
-              item.loan_history = loan_history[index]
-            })
-            console.log(b_list)
-            this.setData({
-              b_list: b_list
-            })
-          }
-        })
+        if(loan_history.length > 0) {
+
+          wx.request({
+            method: 'POST',
+            url: this.url + '/getLoanHistoryInfo',
+            data: { loanHistory: loan_history },  // 用户已还未评价书籍的数组
+            success: res => {
+              // res.data {Array} - 后台返回的已还未评价的书籍信息
+              b_list = res.data
+              b_list.forEach((item, index) => {  // 遍历图书信息数组
+                item.loan_history = loan_history[index]
+              })
+              console.log(b_list)
+              this.setData({
+                b_list: b_list,
+                list_count: b_list.length
+              })
+
+            }
+          })
+
+        }else {
+          
+          setTimeout(() => {
+            wx.hideLoading()
+          }, 500)
+          
+        }
+
       },
     })
   },

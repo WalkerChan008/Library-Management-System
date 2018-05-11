@@ -73,6 +73,7 @@ router.get('/rateBook', function (req, res) {
 
 router.post('/getLoanHistoryInfo', function (req, res) {
     var loanHistory = req.body.loanHistory;
+    console.log(loanHistory);
     model.getLoanHistoryInfo(loanHistory, res);
 });
 
@@ -85,6 +86,11 @@ router.post('/getFavorBook', function (req, res) {
     var favorBookArr = req.body;
     model.getFavorBook(favorBookArr, res);
 });
+
+router.get('/command', function (req, res) {
+    model.command(req.query, res);
+});
+
 
 
 

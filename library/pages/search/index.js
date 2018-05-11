@@ -1,3 +1,4 @@
+// pages/search/index.js
 Page({
 
   url: require('../../config.js'),
@@ -30,21 +31,12 @@ Page({
           });
         }else if(bookReg.test(res.result) || scanType === 'CODE_39') {
           codeType = (scanType === 'CODE_39') ? 'code' : 'isbn';
-          // wx.request({
-          //   url: this.url + '/' + codeType + '_search?' + codeType + '=' + res.result,
-          //   success: (data) => {
-          //     var books_info = data.data;
-          //     console.log(books_info);
-          //     this.setData({ books_info: books_info });
-          //   }
-          // })
 
           wx.navigateTo({
             url: '../books_info/index?code_type=' + codeType + '&result=' + res.result,
-            success: () => {
-              wx.showToast({
-                title: '搜索成功',
-                icon: 'success',
+            success: res => {
+              wx.showLoading({
+                title: '加载中',
                 mask: true
               })
             }
@@ -96,9 +88,10 @@ Page({
   onLoad: function (options) {
     this.setData({
       msgList: [
-        { url: "url", title: "公告：多地首套房贷利率上浮 热点城市渐迎零折扣时代" },
-        { url: "url", title: "公告：悦如公寓三周年生日趴邀你免费吃喝欢唱" },
-        { url: "url", title: "公告：你想和一群有志青年一起过生日嘛？" }]
+        { url: "url", title: "公告：首届“双语之星”翻译大赛征文启事" },
+        {
+          url: "url", title: "公告：【读书月】 读写修炼季之研学平台打卡——让阅读和写作成为科研的" },
+        { url: "url", title: "公告：【闻书香・忆书名】有奖趣味猜书名活动开始啦！" }]
     });
   },
 

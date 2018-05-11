@@ -37,7 +37,14 @@ Page({
       confirmText: '确认',
       cancelText: '我再想想',
       success: res => {
+
         if (res.confirm) {
+          wx.showToast({
+            title: '评价成功',
+            mask: true,
+            duration: 1000
+          })
+
           wx.request({
             url: this.url + '/rateBook',
             data: {
@@ -52,7 +59,7 @@ Page({
               wxUserInfo = res.data[1].value
               list_count = list_count - 1
 
-              console.log(wxUserInfo)
+              console.log(res)
 
               b_list.forEach((item, index) => {
                 if (item.return_info.code_39 == code) {
@@ -73,8 +80,15 @@ Page({
             }
           })
         }
+
       }
     })
+  },
+
+  imageLoad: function () {
+    setTimeout(() => {
+      wx.hideLoading()
+    }, 500)
   },
 
   /**
@@ -83,6 +97,12 @@ Page({
   onLoad: function (options) {
     var b_list = [],
       return_book = []
+
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+
     wx.getStorage({  // 从缓存中读取用户信息
       key: 'wxUserInfo',
       success: res => {
@@ -94,24 +114,33 @@ Page({
           list_count: return_book.length
         })
 
-        wx.request({
-          method: 'POST',
-          url: this.url + '/getReturnBookInfo',
-          data: { codeArr: return_book },  // 用户已还未评价书籍的数组
-          success: res => {
-            // res.data {Array} - 后台返回的已还未评价的书籍信息
-            b_list = res.data
-            b_list.forEach((item, index) => {  // 遍历图书信息数组
-              item.collection_info.forEach((item1, index1) => {  // 遍历每个图书数组中的馆藏信息
-                (item1.code_39 == return_book[index]) ? item.return_info = item1 : '';  // 匹配所借书籍的条码号并插入至该条图书信息的return_info字段中
+        if (return_book.length > 0) {
+          wx.request({
+            method: 'POST',
+            url: this.url + '/getReturnBookInfo',
+            data: { codeArr: return_book },  // 用户已还未评价书籍的数组
+            success: res => {
+              // res.data {Array} - 后台返回的已还未评价的书籍信息
+              b_list = res.data
+              b_list.forEach((item, index) => {  // 遍历图书信息数组
+                item.collection_info.forEach((item1, index1) => {  // 遍历每个图书数组中的馆藏信息
+                  (item1.code_39 == return_book[index]) ? item.return_info = item1 : '';  // 匹配所借书籍的条码号并插入至该条图书信息的return_info字段中
+                })
               })
-            })
-            console.log(b_list)
-            this.setData({
-              b_list: b_list
-            })
-          }
-        })
+              console.log(b_list)
+              this.setData({
+                b_list: b_list
+              })
+
+            }
+          })
+        }else {
+
+          setTimeout(() => {
+            wx.hideLoading()
+          }, 500)
+          
+        }
       },
     })
   },

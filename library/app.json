@@ -1,5 +1,6 @@
 {
   "pages": [
+
     "pages/search/index",
     "pages/mine/mine",
     "pages/loan_book/loan_book",
@@ -41,5 +42,6 @@
         "selectedIconPath": "/images/mine-2.png"
       }
     ]
-  }
+  },
+  "debug": true
 }

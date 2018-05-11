@@ -51,38 +51,68 @@ Page({
     var code_39 = e.currentTarget.id,  // 获取图书馆图书条码号
         wxUserInfo = this.data.wxUserInfo,
         libAuth = wxUserInfo.lib_auth
+
     if(libAuth) {
+
       wx.showModal({
-        title: '确认借书',
-        content: '您确定借阅《' + this.data.b_info.title + '》？',
+        title: '扫码借书',
+        content: '借阅《' + this.data.b_info.title + '》需扫描图书的7位唯一识别条形码',
+        confirmText: '扫描',
         success: (res) => {
           if(res.confirm) {
-            wx.request({
-              url: this.url + '/loan_book',
-              data: {
-                code: code_39,
-                openid: this.data.wxUserInfo.openid
-              },
-              success: (res) => {
+            
+            wx.scanCode({
+              onlyFromCamera: true,
+              success: res => {
                 console.log(res)
-                // res.data[0].value -> books_info
-                // res.data[1].value -> wxUserInfo
-                this.setData({  // 将更新后的图书信息存入data中
-                  wxUserInfo: res.data[1].value,
-                  b_info: res.data[0].value,
-                  list: res.data[0].value.collection_info
-                });
-                wx.setStorage({  // 将更新后的用户信息存入缓存中
-                  key: 'wxUserInfo',
-                  data: res.data[1].value
-                })
+                if(res.result == code_39) {
+
+                  wx.showToast({
+                    title: '借阅成功',
+                    mask: true,
+                    duration: 1000
+                  })
+
+                  wx.request({
+                    url: this.url + '/loan_book',
+                    data: {
+                      code: code_39,
+                      openid: this.data.wxUserInfo.openid
+                    },
+                    success: (res) => {
+                      console.log(res)
+                      // res.data[0].value -> books_info
+                      // res.data[1].value -> wxUserInfo
+                      this.setData({  // 将更新后的图书信息存入data中
+                        wxUserInfo: res.data[1].value,
+                        b_info: res.data[0].value,
+                        list: res.data[0].value.collection_info
+                      });
+                      wx.setStorage({  // 将更新后的用户信息存入缓存中
+                        key: 'wxUserInfo',
+                        data: res.data[1].value
+                      })
+                    }
+                  })
+
+                }else {
+                  wx.showToast({
+                    title: '条码不匹配',
+                    icon: 'none',
+                    mask: true,
+                    duration: 1000
+                  })
+                }
               }
             })
+
           }
-          console.log(res)
+
         }
       })
+
     } else {
+
       wx.showModal({
         title: '借书失败',
         content: '未进行图书馆读者认证。是否前往认证？',
@@ -100,6 +130,7 @@ Page({
           }
         }
       })
+      
     }
   },
 
@@ -108,55 +139,162 @@ Page({
    * @param e - 事件源对象
    */
   addToFavor: function (e) {
-    var wxUserInfo = {}
+    var wxUserInfo = this.data.wxUserInfo
 
     var isbn = e.currentTarget.id,
         favor_flag = this.data.favor_flag  // 初始收藏状态
 
-    console.log(favor_flag)
+    console.log(wxUserInfo)
 
     favor_flag = favor_flag ? false : true  // 点击后变成的状态
 
     console.log(favor_flag)
-    if (favor_flag) {    // 点击收藏时
-      wx.showToast({
-        title: '收藏成功',
-        icon: 'success',
-        mask: true
+    if(wxUserInfo.openid) {
+
+      if (favor_flag) {    // 点击收藏时
+        wx.showToast({
+          title: '收藏成功',
+          icon: 'success',
+          mask: true
+        })
+      }else {
+        wx.showToast({
+          title: '已取消收藏',
+          icon: 'success',
+          mask: true
+        })
+      }
+
+      // 更改用户对此书的收藏与否
+      wx.request({
+        method: 'POST',
+        url: this.url + '/changeFavor',
+        data: {
+          openid: this.data.wxUserInfo.openid,
+          isbn: isbn,
+          favor_flag: favor_flag  // 需要修改成为的状态
+        },
+        success: res => {
+          wxUserInfo = res.data
+
+          this.setData({
+            wxUserInfo: wxUserInfo,
+            favor_flag: favor_flag
+          })
+
+          console.log(wxUserInfo)
+
+          wx.setStorage({
+            key: 'wxUserInfo',
+            data: wxUserInfo,
+          })
+        }
       })
-    }else {
+
+    } else {
       wx.showToast({
-        title: '已取消收藏',
-        icon: 'success',
-        mask: true
+        title: '未登录',
+        icon: 'none'
       })
     }
 
-    wx.request({
-      method: 'POST',
-      url: this.url + '/changeFavor',
-      data: {
-        openid: this.data.wxUserInfo.openid,
-        isbn: isbn,
-        favor_flag: favor_flag  // 需要修改成为的状态
-      },
-      success: res => {
-        wxUserInfo = res.data
 
-        this.setData({
-          wxUserInfo: wxUserInfo,
-          favor_flag: favor_flag
+
+  },
+
+  /**
+   * 未馆藏书籍推荐购买
+   * @param e - 事件源对象
+   */
+  command: function (e) {
+    var isbn = e.currentTarget.id,
+        wxUserInfo = this.data.wxUserInfo,
+        commandArr = wxUserInfo.command || [],
+        openid = wxUserInfo.openid,
+        libAuth = wxUserInfo.lib_auth
+
+    var commandFlag = false  // 是否已推荐标识
+    
+    if (libAuth) {
+      commandArr.forEach( (item, index) => {
+        if (commandFlag) return
+        commandFlag = item == isbn ? true : false
+      })
+
+      if (commandFlag) {
+        wx.showToast({
+          title: '您已推荐过',
+          icon: 'none'
         })
+      } else {
+        wx.showModal({
+          title: '推荐购买',
+          content: '确认推荐购买此书吗？',
+          confirmText: '确认',
+          success: res => {
 
-        console.log(wxUserInfo)
+            if (res.confirm) {
 
-        wx.setStorage({
-          key: 'wxUserInfo',
-          data: wxUserInfo,
+              wx.request({
+                url: this.url + '/command',
+                data: {
+                  isbn: isbn,
+                  openid: openid
+                },
+                success: res => {
+                  // res.data[0].value -> books_info
+                  // res.data[1].value -> wxUserInfo
+                  wxUserInfo = res.data[1].value
+                  console.log(res)
+
+                  this.setData({
+                    wxUserInfo: wxUserInfo
+                  })
+                  wx.setStorage({
+                    key: 'wxUserInfo',
+                    data: wxUserInfo,
+                  })
+                }
+              })
+
+            }
+
+          }
         })
       }
-    })
+    } else {
+      wx.showModal({
+        title: '借书失败',
+        content: '未进行图书馆读者认证。是否前往认证？',
+        success: res => {
+          if (res.confirm) {
+            if (wxUserInfo.openid) {  // 判断是否已登录
+              wx.navigateTo({
+                url: '../lib_auth/lib_auth',
+              })
+            } else {
+              wx.reLaunch({
+                url: '../mine/mine',
+              })
+            }
+          }
+        }
+      })
+    }
+  },
 
+  imageLoad: function () {
+    wx.showLoading({
+      title: '加载中',
+    })
+    setTimeout(() => {
+      wx.hideLoading()
+      wx.showToast({
+        title: '加载成功',
+        mask: true,
+        duration: 1000
+      })
+    }, 500)
   },
 
   /**
@@ -167,13 +305,14 @@ Page({
         list = [],
         isbn = ''
 
-    console.log(isbn)
+    console.log(options)
 
     var wxUserInfo = {},
       favorBook = [],
       favor_flag = false
 
     codeQuery = options  // {OBJECT} 码的类型 & 条码号
+
     wx.request({    // 向后台发起请求，获取图书信息数据
       url: this.url + '/' + codeQuery.code_type + '_search?' + codeQuery.code_type + '=' + codeQuery.result,
       success: (res) => {
@@ -181,7 +320,12 @@ Page({
         list = b_info.collection_info || [];
         isbn = b_info.isbn13
 
-        console.log(isbn);
+        console.log(b_info);
+
+        this.setData({
+          b_info: b_info,
+          list: list
+        })
 
         wx.getStorage({
           key: 'wxUserInfo',
@@ -203,10 +347,9 @@ Page({
             console.log(res.data)
             this.setData({
               wxUserInfo: wxUserInfo,
-              b_info: b_info,
-              list: list,
               favor_flag: favor_flag
             })
+
           },
         })
       }

@@ -15,8 +15,7 @@ Page({
       { text: '个人收藏', url: '../myfavor/myfavor', icon: '../../images/usermenu/myfavor.png', tips: '' },
       { text: '借阅历史', url: '../loan_history/loan_history', icon: '../../images/usermenu/loan_book.png', tips: '' },
       { text: '待评价', url: '../return_book/return_book', icon: '../../images/usermenu/evaluate.png', tips: '' },
-      { text: '待归还', url: '../loan_book/loan_book', icon: '../../images/usermenu/return.png', tips: '' },
-      { text: '设置', url: '../setting/setting', icon: '../../images/usermenu/setting.png', tips: '' },
+      { text: '待归还', url: '../loan_book/loan_book', icon: '../../images/usermenu/return.png', tips: '' }
     ]
   },
 
@@ -78,6 +77,10 @@ Page({
     }
   },
 
+  setting: function () {
+    wx.openSetting()
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -96,33 +99,53 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    wx.getStorage({
-      key: 'wxUserInfo',
+    wx.getSetting({
       success: res => {
-        console.log(res)
-        if (res) {
-          wx.request({
-            url: this.url + '/getUserInfo',
-            data: { openid: res.data.openid },
+        
+        if (res.authSetting['scope.userInfo']) {
+
+          wx.getStorage({
+            key: 'wxUserInfo',
             success: res => {
-              console.log(res);
-              this.setData({
-                wxUserInfo: res.data,
-                wxAuth: res.data.openid ? true : false
-              })
+              console.log(res)
+              if (res) {
+                wx.request({
+                  url: this.url + '/getUserInfo',
+                  data: { openid: res.data.openid },
+                  success: res => {
+                    console.log(res);
+                    this.setData({
+                      wxUserInfo: res.data,
+                      wxAuth: res.data.openid ? true : false
+                    })
 
-              console.log(res.data)
+                    console.log(res.data)
 
-              wx.setStorage({
-                key: 'wxUserInfo',
-                data: res.data,
-              })
-            }
+                    wx.setStorage({
+                      key: 'wxUserInfo',
+                      data: res.data,
+                    })
+
+                    setTimeout( () => {
+                      wx.hideLoading()
+                    }, 500)
+
+                  }
+                })
+              }
+
+            },
+          })
+
+        } else {
+          this.setData({
+            wxUserInfo: {},
+            wxAuth: false
           })
         }
-
-      },
+      }
     })
+
   },
 
   /**
