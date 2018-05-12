@@ -27,53 +27,68 @@ Page({
         list_count = this.data.list_count
 
     wx.showModal({
-      title: '还书确认',
+      title: '扫码还书',
       content: '您确认归还此书吗？',
-      confirmText: '确认',
+      confirmText: '扫描',
       success: res => {
         if(res.confirm) {
 
-          wx.showToast({
-            title: '还书成功',
-            mask: true,
-            duration: 1000
-          })
-
-          wx.request({
-            url: this.url + '/returnBook',
-            data: {
-              code: code_39,
-              openid: this.data.wxUserInfo.openid
-            },
+          wx.scanCode({
+            onlyFromCamera: true,
             success: res => {
-              // res.data[0].value -> books_info
-              // res.data[1].value -> wxUserInfo
-              b_list = this.data.b_list
-              wxUserInfo = res.data[1].value
-              list_count = list_count - 1
+              if (res.result == code_39) {
 
-              console.log(wxUserInfo)
+                wx.showToast({
+                  title: '还书成功',
+                  mask: true,
+                  duration: 1000
+                })
 
-              b_list.forEach( (item, index) => {
-                if (item.loan_info.code_39 == code_39) {
-                  b_list.remove(index);
-                }
-              })
+                wx.request({
+                  url: this.url + '/returnBook',
+                  data: {
+                    code: code_39,
+                    openid: this.data.wxUserInfo.openid
+                  },
+                  success: res => {
+                    // res.data[0].value -> books_info
+                    // res.data[1].value -> wxUserInfo
+                    b_list = this.data.b_list
+                    wxUserInfo = res.data[1].value
+                    list_count = list_count - 1
 
-              console.log(b_list)
+                    console.log(wxUserInfo)
 
-              this.setData({
-                b_list: b_list,
-                wxUserInfo: wxUserInfo,
-                list_count: list_count
-              })
+                    b_list.forEach( (item, index) => {
+                      if (item.loan_info.code_39 == code_39) {
+                        b_list.remove(index);
+                      }
+                    })
 
-              wx.setStorage({
-                key: 'wxUserInfo',
-                data: wxUserInfo,
-              })
+                    console.log(b_list)
 
-              console.log(res)
+                    this.setData({
+                      b_list: b_list,
+                      wxUserInfo: wxUserInfo,
+                      list_count: list_count
+                    })
+
+                    wx.setStorage({
+                      key: 'wxUserInfo',
+                      data: wxUserInfo,
+                    })
+
+                    console.log(res)
+                  }
+                })
+
+              }else {
+                wx.showModal({
+                  title: '还书失败',
+                  content: '图书唯一识别条形码不匹配，请重试！',
+                  showCancel: false
+                })
+              }
             }
           })
 

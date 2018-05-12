@@ -96,11 +96,10 @@ Page({
                   })
 
                 }else {
-                  wx.showToast({
-                    title: '条码不匹配',
-                    icon: 'none',
-                    mask: true,
-                    duration: 1000
+                  wx.showModal({
+                    title: '借书失败',
+                    content: '图书唯一识别条形码不匹配，请重试！',
+                    showCancel: false
                   })
                 }
               }

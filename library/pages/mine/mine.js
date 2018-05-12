@@ -24,6 +24,7 @@ Page({
    */
   getUserInfo: function (e) {
     var userInfo = {}    // 用户信息
+    console.log(e)
     if(e.detail.iv) {     // 授权后才将数据放入缓存
       wx.login({
         success: res => {
