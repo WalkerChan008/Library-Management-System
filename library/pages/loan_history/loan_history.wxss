@@ -1,6 +1,6 @@
 /* pages/loan_history/loan_history.wxss */
 .page {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f6f6;
 }
 
@@ -19,6 +19,9 @@
 
 .line {
   height: 30rpx;
+}
+.btm-line {
+  height: 1px;
 }
 .list-wrap {
 }
@@ -45,8 +48,6 @@
   width: 154rpx;
   max-width: 27%;
   height: 216rpx;
-  background: url('https://img3.doubanio.com/lpic/s11117924.jpg') no-repeat; 
-  background-size: contain;
 }
 
 .book-info .book-cont {

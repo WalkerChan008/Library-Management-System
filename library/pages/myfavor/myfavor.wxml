@@ -10,7 +10,9 @@
       <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
         <view class="list-item">
           <view class="book-info">
-            <image class="book-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
+            <view class="book-img">
+              <image src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
+            </view>
             <view class="book-cont">
               <text class="book-title">{{ item.title }}</text>
               <text class="date author">作者：{{ item.author }}</text>
@@ -30,4 +32,5 @@
     <!-- id="{{ item.loan_info.code_39 }}" -->
 
   </view>
+  <view class="btm-line"></view>
 </view>

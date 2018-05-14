@@ -1,6 +1,7 @@
 /* pages/myfavor/myfavor.wxss */
+
 .page {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f6f6;
 }
 
@@ -20,6 +21,10 @@
 .line {
   height: 30rpx;
 }
+.btm-line {
+  height: 1px;
+}
+
 .list-wrap {
 }
 
@@ -33,6 +38,7 @@
 .list-item:first-of-type {
   margin-top: 0 !important;
 }
+
 .book-info {
   display: flex;
   position: relative;
@@ -40,13 +46,15 @@
   box-sizing: border-box;
 }
 
-
 .book-info .book-img {
   width: 220rpx;
-   max-width: 220rpx; 
-   height: 280rpx; 
-  background: url('https://img3.doubanio.com/lpic/s11117924.jpg') no-repeat; 
-  background-size: contain;
+  max-width: 220rpx;
+  height: 280rpx;
+}
+
+.book-info .book-img image {
+  width: 220rpx;
+  height: 280rpx;
 }
 
 .book-info .book-cont {
@@ -56,6 +64,7 @@
   margin-left: 20rpx;
   width: 70%;
 }
+
 .book-info .book-cont .book-title {
   font-size: 32rpx;
   font-weight: bold;
@@ -64,6 +73,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .book-info .book-cont .date {
   /* display: -webkit-box; */
   white-space: nowrap;
@@ -78,6 +88,7 @@
   right: 20rpx;
   bottom: 10rpx;
 }
+
 .cancel-btn button {
   font-size: 24rpx;
 }

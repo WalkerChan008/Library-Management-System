@@ -1,7 +1,7 @@
 <!--pages/lib_auth/lib_auth.wxml-->
 <view class="container">
   <view class="login-icon">
-    <image class="login-img" src="../../images/usermenu/guet_lib.jpg"></image>
+    <image class="login-img" mode="widthFix" src="../../images/usermenu/guet_lib.jpg"></image>
   </view>
   <view class="login-from">
 
@@ -17,7 +17,7 @@
     <view class="inputView">
       <image class="keyImage" src="../../images/usermenu/password.png"></image>
       <label class="loginLab">密码</label>
-      <input class="inputText" password="true" placeholder="请输入密码" bindinput="passwordInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_password : '' }}" />
+      <input class="inputText" password="true" placeholder="请输入密码" confirm-type="done" bindinput="passwordInput" disabled="{{disabled}}" value="{{ wxUserInfo.lib_auth ? wxUserInfo.lib_password : '' }}" />
     </view>
 
     <!-- 提示 -->

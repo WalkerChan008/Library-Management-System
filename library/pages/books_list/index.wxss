@@ -33,7 +33,6 @@
   height: 270rpx;
 }
 .list-item .book-img {
-  /* background: url('https://img3.doubanio.com/lpic/s11117924.jpg') no-repeat; */
   background-size: contain;
 }
 

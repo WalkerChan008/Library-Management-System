@@ -17,7 +17,7 @@ page{
  flex: none; 
 } 
 .login-img{ 
- width: 750rpx; 
+ width: 750rpx;
 } 
  
 /*表单内容*/ 

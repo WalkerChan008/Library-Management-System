@@ -21,4 +21,5 @@
       </view>
     </block>
   </view>
+  <view class="btm-line"></view>
 </view>

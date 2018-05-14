@@ -263,7 +263,7 @@ Page({
       }
     } else {
       wx.showModal({
-        title: '借书失败',
+        title: '操作失败',
         content: '未进行图书馆读者认证。是否前往认证？',
         success: res => {
           if (res.confirm) {

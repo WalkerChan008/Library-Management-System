@@ -33,4 +33,5 @@
     <!-- id="{{ item.loan_info.code_39 }}" -->
 
   </view>
+  <view class="btm-line"></view>
 </view>

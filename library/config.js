@@ -1,6 +1,6 @@
-var requestUrl = 'http://localhost';
+// var requestUrl = 'http://localhost';
 // var requestUrl = 'http://192.168.253.1';   // 360 WIFI
-// var requestUrl = 'http://172.19.29.1';
+var requestUrl = 'http://172.20.178.1';
 
 
 module.exports = requestUrl;

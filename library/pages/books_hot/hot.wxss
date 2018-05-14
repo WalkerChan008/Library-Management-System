@@ -56,6 +56,10 @@
   padding: 15px 20px;
   border-bottom: 1px solid #ccc;
 }
+navigator:nth-last-of-type(1) .rank-list {
+  border: none;
+}
+
 .rank-num,
 .rank-title,
 .rank-like {
