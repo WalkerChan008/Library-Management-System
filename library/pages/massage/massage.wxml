@@ -1,0 +1,14 @@
+<!--pages/massage/massage.wxml-->
+<view class="page">
+  <view class="weui-panel weui-panel_access">
+      <view class="weui-panel__hd">未读消息</view>
+      <view class="weui-panel__bd">
+        <block wx:for="{{loan_msg}}" wx:key="id">
+          <view class="weui-media-box weui-media-box_text">
+              <view class="weui-media-box__title weui-media-box__title_in-text">还书提醒</view>
+              <view class="weui-media-box__desc">您在本图书馆借阅的《{{ item.title }}》即将到期，请尽快归还！</view>
+          </view>
+        </block>
+      </view>
+  </view>
+</view>

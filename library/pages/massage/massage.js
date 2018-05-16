@@ -1,4 +1,4 @@
-// pages/books_list/index.js
+// pages/massage/massage.js
 Page({
 
   url: require('../../config.js'),
@@ -7,50 +7,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    list_count: 0,
-    b_list: []
-  },
-
-  imageLoad: function () {
-    setTimeout( () => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '加载成功',
-        duration: 1000
-      })
-    }, 500)
+    loan_msg: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var b_list = [];
 
-    if(options.value) {
-      wx.setNavigationBarTitle({
-        title: '搜索 ' + options.value
-      })
-    }
-
-    console.log(options)
-    wx.request({    // 向后台发起请求，获取图书列表信息
-      url: this.url + '/value_search?value=' + options.value,
-      success: (data) => {
-        console.log(data)
-        b_list = data.data;
-
-        this.setData({
-          list_count: b_list.length,
-          b_list: b_list
-        })
-
-        if(b_list.length == 0) {
-          wx.hideLoading()
-        }
-
-      }
-    })
   },
 
   /**
@@ -64,7 +28,42 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    var loan_msg = [],
+        loan_code = []
+
+    wx.getStorage({
+      key: 'loanMsg',
+      success: res => {
+        loan_msg = res.data || []
+        loan_msg.forEach( (item, index) => {
+          loan_code.push(item.code_39)
+        })
+
+        console.log(loan_code)
+
+        if(loan_msg.length > 0) {
+          wx.request({
+            method: 'POST',
+            url: this.url + '/getLoanBookInfo',
+            data: {codeArr: loan_code},
+            success: res => {
+              console.log(res.data)
+              this.setData({
+                loan_msg: res.data
+              })
+            }
+          })
+        }
+
+      wx.setStorage({
+        key: 'loanMsg',
+        data: []
+      })
+
+      }
+    })
+
+
   },
 
   /**

@@ -1,5 +1,13 @@
 <!--pages/books_hot/hot.wxml-->
 <view class="container">
+  <view class="picker">
+    <picker bindchange="bindPickerChange" value="{{pickerIndex}}" range="{{pickerArr}}">
+      <view>
+        <text class="cur-choise">当前榜单：</text>
+        <text class="cur-value">{{pickerArr[pickerIndex]}}</text>
+      </view>
+    </picker>
+  </view>
   <navigator url="../books_info/index?code_type=isbn&result={{ top1.isbn13 }}">
     <view class="hot-head">
       <view class="hot-title three-point">{{ top1.title }}</view>

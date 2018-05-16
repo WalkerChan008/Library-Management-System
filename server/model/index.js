@@ -201,10 +201,49 @@ model = {
      */
     getBooksInfoByValue: function (value, res) {
         var db = this.db;
-        
-        var reg = new RegExp(value, 'ig');
 
-        db._find('books_info', {title: reg})
+        var blankReg = /\s+/g;
+        value = value.replace(blankReg, ' ');
+
+        var valueArr = value.split(' '),
+            len = valueArr.length,
+            json = {};
+
+        if(len == 1) {
+            console.log('len', len)
+            var reg = new RegExp(value, 'ig');
+
+            json = {
+                $or: [
+                    { title: reg },
+                    { publisher: reg },
+                    { author: reg }
+                ]
+            }
+        }else if(len == 2) {
+            console.log('len', len)
+            json = {
+                $or: [
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}] },
+                    { title: new RegExp(valueArr[0], 'ig'), publisher: new RegExp(valueArr[1], 'ig') },
+                    { title: new RegExp(valueArr[0], 'ig'), author: new RegExp(valueArr[1], 'ig') },
+                    { $and: [{publisher: new RegExp(valueArr[0], 'ig')}, {publisher: new RegExp(valueArr[1], 'ig')}] },
+                    { publisher: new RegExp(valueArr[0], 'ig'), title: new RegExp(valueArr[1], 'ig') },
+                    { publisher: new RegExp(valueArr[0], 'ig'), author: new RegExp(valueArr[1], 'ig') },
+                    { $and: [{author: new RegExp(valueArr[0], 'ig')}, {author: new RegExp(valueArr[1], 'ig')}] },
+                    { author: new RegExp(valueArr[0], 'ig'), title: new RegExp(valueArr[1], 'ig') },
+                    { author: new RegExp(valueArr[0], 'ig'), publisher: new RegExp(valueArr[1], 'ig') },
+                ]
+            }
+        }else {
+            console.log('len', len)
+            json = {
+                noField: 'noField'
+            }
+        }
+
+
+        db._find('books_info', json)
             .then( (data) => {
                 this.formatData(data);
                 res.jsonp(data);

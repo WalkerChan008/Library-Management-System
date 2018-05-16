@@ -30,12 +30,18 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 0,
 			"list": [
 				{
+					"id": 0,
+					"name": "mine",
+					"pathName": "pages/mine/mine",
+					"query": ""
+				},
+				{
 					"id": -1,
-					"name": "hot",
-					"pathName": "pages/books_hot/hot",
+					"name": "msg",
+					"pathName": "pages/massage/massage",
 					"query": ""
 				}
 			]

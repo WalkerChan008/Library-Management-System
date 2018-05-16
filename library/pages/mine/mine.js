@@ -15,8 +15,10 @@ Page({
       { text: '个人收藏', url: '../myfavor/myfavor', icon: '../../images/usermenu/myfavor.png', tips: '' },
       { text: '借阅历史', url: '../loan_history/loan_history', icon: '../../images/usermenu/loan_book.png', tips: '' },
       { text: '待评价', url: '../return_book/return_book', icon: '../../images/usermenu/evaluate.png', tips: '' },
-      { text: '待归还', url: '../loan_book/loan_book', icon: '../../images/usermenu/return.png', tips: '' }
-    ]
+      { text: '待归还', url: '../loan_book/loan_book', icon: '../../images/usermenu/return.png', tips: '' },
+      { text: '消息', url: '../massage/massage', icon: '../../images/usermenu/msg.png', tips: '' }
+    ],
+    loan_msg: []
   },
 
   /**
@@ -136,6 +138,17 @@ Page({
               }
 
             },
+          })
+
+          wx.getStorage({
+            key: 'loanMsg',
+            success: res => {
+              res.data.length == 0 ? wx.hideTabBarRedDot({ index: 2 }) : ''
+
+              this.setData({
+                loan_msg: res.data
+              })
+            }
           })
 
         } else {

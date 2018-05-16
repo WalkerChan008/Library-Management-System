@@ -10,7 +10,9 @@
     "pages/books_list/index",
     "pages/books_info/index",
     "pages/lib_auth/lib_auth",
-    "pages/myfavor/myfavor"
+    "pages/myfavor/myfavor",
+    "pages/massage/massage"
+    
   ],
   "window": {
     "navigationBarTextStyle": "white",

@@ -1,9 +1,73 @@
 App({
 
+  url: require('./config.js'),
+
   /**
    * 当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
    */
   onLaunch: function () {
+    var wxUserInfo = {},
+        loanBook = [],
+        b_list = [],
+        loanArr = []
+
+    var nowDate = new Date(),
+        returnDate = '',
+        showDotFlag = false
+
+    wx.getStorage({
+      key: 'wxUserInfo',
+      success: (res) => {
+        wxUserInfo = res.data
+        loanBook = wxUserInfo.loan_book || []
+        if (loanBook.length > 0) {
+          wx.request({
+            method: 'POST',
+            url: this.url + '/getLoanBookInfo',
+            data: { codeArr: loanBook },  // 用户已借未还书籍的数组
+            success: res => {
+              // res.data {Array} - 后台返回的已借未还的书籍信息
+              b_list = res.data
+              b_list.forEach((item, index) => {  // 遍历图书信息数组
+                item.collection_info.forEach((item1, index1) => {  // 遍历每个图书数组中的馆藏信息
+                  if (item1.code_39 == loanBook[index]) {// 匹配所借书籍的条码号
+
+
+
+                    // if(showDotFlag) return  // 数组中只要有一个满足<=3天，其他的都不进行比较
+                    console.log(item1.return_date)
+                    returnDate = new Date(Date.parse(item1.return_date.replace(/-/g, '/')));  // 字符串转换为Date对象
+                    console.log(Math.ceil((returnDate - nowDate) / (1000 * 60 * 60 * 24)))
+                    // Math.ceil((returnDate - nowDate) / (1000 * 60 * 60 * 24))  今天日期和还书日期之差，单位：天
+
+                    // <=3天，“我的”的tabbar展示小红点
+                    if (Math.ceil((returnDate - nowDate) / (1000 * 60 * 60 * 24)) <= 3) {
+                      wx.showTabBarRedDot({
+                        index: 2
+                      })
+                      // showDotFlag = true  // 已展示小红点
+                      loanArr.push(item1)
+                    }
+                    
+
+                    
+                  }
+                })
+              })
+
+              console.log(loanArr)
+
+              wx.setStorage({
+                key: 'loanMsg',
+                data: loanArr,
+              })
+
+            }
+          })
+
+        }
+      },
+    })
 
     /*
     wx.checkSession({
@@ -36,7 +100,6 @@ App({
     })
     */
     
-
     /*
     // 获取用户信息
     wx.getSetting({

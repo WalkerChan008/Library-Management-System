@@ -39,6 +39,10 @@
   height: 20px;
 }
 
+.weui-badge {
+  vertical-align: 1px;
+}
+
 .weui-cells::after{
   content: none;
   border-bottom: none;
