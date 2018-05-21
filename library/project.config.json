@@ -43,6 +43,12 @@
 					"name": "msg",
 					"pathName": "pages/massage/massage",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "rate",
+					"pathName": "pages/rate/rate",
+					"query": ""
 				}
 			]
 		}

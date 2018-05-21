@@ -1,0 +1,58 @@
+/* pages/rate/rate.wxss */
+.book-info {
+  display: flex;
+  position: relative;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+.book-img {
+  width: 154rpx;
+  max-width: 27%;
+  height: 216rpx;
+  background: red;
+}
+.book-cont {
+  display: flex;
+  position: relative;
+  flex-flow: column nowrap;
+  margin-left: 30rpx;
+  width: 70%;
+}
+.book-cont .book-title {
+  margin-bottom: 10rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #424242;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.book-info .book-cont .date {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 30rpx;
+  color: #aaa;
+}
+
+
+.rate-star {
+  position: relative;
+  height: 150rpx;
+}
+.star-image {
+  position: absolute;
+  top: 50rpx;
+  width: 150rpx;
+  height: 150rpx;
+  src: "../../images/normal.png";
+}
+
+.item {
+  position: absolute;
+  top: 0rpx;
+  width: 75rpx;
+  height: 150rpx;
+}

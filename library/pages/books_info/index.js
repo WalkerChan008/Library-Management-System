@@ -296,6 +296,13 @@ Page({
     }, 500)
   },
 
+  bindShare: function () {
+    wx.showToast({
+      title: '未登录',
+      icon: 'none'
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

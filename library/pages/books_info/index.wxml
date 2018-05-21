@@ -32,7 +32,8 @@
       <view class="share">
         <image src="../../images/share.png"></image>
         <text>分享</text>
-        <button open-type="share"></button>
+        <button wx:if="{{ wxUserInfo.openid }}" open-type="share"></button>
+        <button wx:else bindtap="bindShare"></button>
       </view>
     </view>
 

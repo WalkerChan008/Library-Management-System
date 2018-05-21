@@ -210,7 +210,7 @@ model = {
             json = {};
 
         if(len == 1) {
-            console.log('len', len)
+            console.log('len', len);
             var reg = new RegExp(value, 'ig');
 
             json = {
@@ -221,7 +221,7 @@ model = {
                 ]
             }
         }else if(len == 2) {
-            console.log('len', len)
+            console.log('len', len);
             json = {
                 $or: [
                     { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}] },
@@ -233,6 +233,13 @@ model = {
                     { $and: [{author: new RegExp(valueArr[0], 'ig')}, {author: new RegExp(valueArr[1], 'ig')}] },
                     { author: new RegExp(valueArr[0], 'ig'), title: new RegExp(valueArr[1], 'ig') },
                     { author: new RegExp(valueArr[0], 'ig'), publisher: new RegExp(valueArr[1], 'ig') },
+                ]
+            }
+        }else if(len == 3) {
+            console.log('len', len);
+            json = {
+                $or: [
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
                 ]
             }
         }else {

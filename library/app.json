@@ -11,7 +11,8 @@
     "pages/books_info/index",
     "pages/lib_auth/lib_auth",
     "pages/myfavor/myfavor",
-    "pages/massage/massage"
+    "pages/massage/massage",
+    "pages/rate/rate"
     
   ],
   "window": {
@@ -27,7 +28,7 @@
     "list": [
       {
         "pagePath": "pages/search/index",
-        "text": "搜索",
+        "text": "首页",
         "iconPath": "/images/library-1.png",
         "selectedIconPath": "/images/library-2.png"
       },
@@ -44,6 +45,5 @@
         "selectedIconPath": "/images/mine-2.png"
       }
     ]
-  },
-  "debug": true
+  }
 }

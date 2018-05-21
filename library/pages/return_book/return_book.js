@@ -31,7 +31,10 @@ Page({
 
     rate = (id == 'like') ? '赞' : '踩'
 
-    wx.showModal({
+    wx.navigateTo({
+      url: '../rate/rate?openid=' + this.data.wxUserInfo.openid + '&code=' + code,
+    })
+    /*wx.showModal({
       title: '评价确认',
       content: '您对该书籍的评价为：' + rate + '，一旦确认无法修改!',
       confirmText: '确认',
@@ -82,7 +85,7 @@ Page({
         }
 
       }
-    })
+    })*/
   },
 
   imageLoad: function () {

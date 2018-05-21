@@ -7,7 +7,7 @@
   <view class="wrap-search">
     <view class="search">
       <icon class="search-icon" type="search" size="14" />
-      <input confirm-type="search" maxlength="50" placeholder="搜索书名/扫描条形码" placeholder-class="plhd" bindconfirm="bindConfirm" />
+      <input confirm-type="search" maxlength="50" placeholder="输入关键字/扫描条形码" placeholder-class="plhd" bindconfirm="bindConfirm" />
       <image class="search-scan" src="../../images/scan.png" bindtap="bindScanTap" />
     </view>
   </view>
