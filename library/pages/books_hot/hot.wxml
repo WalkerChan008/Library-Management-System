@@ -16,7 +16,7 @@
         <view class="weui-flex__item">
           <image class="hot-book-img" src="{{ top1.images.large || top1.image }}" bindload="imageLoad"></image>
         </view>
-        <view class="hot-des">{{ top1.like }}赞</view>
+        <view class="hot-des">{{ top1.avg_rate }}分</view>
       </view>
     </view>
   </navigator>
@@ -27,7 +27,7 @@
           <view class="rank-num">{{ index + 2 }}</view>
           <image class="rank-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
           <view class="rank-title"><view class=" three-point">{{ item.title }}</view></view>
-          <view class="rank-like">{{ item.like }}赞</view>
+          <view class="rank-like">{{ item.avg_rate }}分</view>
         </view>
       </navigator>
     </block>

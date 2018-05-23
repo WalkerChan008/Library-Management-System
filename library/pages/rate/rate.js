@@ -12,6 +12,12 @@ Page({
     selectedSrc: '../../images/full-star.png',
     halfSrc: '../../images/half-star.png',
     key: 0,//评分
+
+    rateValue: '',
+    valueLen: 0,
+
+    b_info: {}, //图书信息
+    openid: '',
   },
 
   //点击右边,半颗星
@@ -36,7 +42,55 @@ Page({
     })
   },
 
+  bindinput: function (e) {
+    var value = e.detail.value,
+        valueLen = value.length
+
+    this.setData({
+      rateValue: value,
+      valueLen: valueLen
+    })
+  },
+
   submitRate: function () {
+    var rateScore = this.data.key * 2,
+        rateValue = this.data.rateValue,
+        openid = this.data.openid,
+        code_39 = this.data.b_info.return_info.code_39,
+        isbn13 = this.data.b_info.isbn13
+      
+    wx.showModal({
+      title: '评价确认',
+      content: '您确认提交该评价吗？',
+      success: res => {
+        if(res.confirm) {
+
+          wx.request({
+            url: this.url + '/rateBook',
+            data: {
+              openid: openid,
+              code_39: code_39,
+              isbn13: isbn13,
+              rateScore: rateScore,
+              rateValue: rateValue
+            },
+            success: res => {
+              wx.setStorage({
+                key: 'wxUserInfo',
+                data: res.data[1].value,
+              })
+            }
+
+          })
+
+          wx.redirectTo({
+            url: '../operate_result/ope_res?type=rate',
+          })
+
+        }
+      }
+    })
+
 
   },
 
@@ -44,14 +98,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // options: code, openid
+    // options: openid
     console.log(options)
-    wx.request({
-      url: this.url + '/code_search?code=' + options.code,
+
+    wx.getStorage({
+      key: 'rateBookInfo',
       success: res => {
+
         console.log(res)
-      }
+
+        this.setData({
+          b_info: res.data,
+          openid: options.openid
+        })
+
+      },
     })
+
   },
 
   /**
@@ -79,7 +142,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    
   },
 
   /**

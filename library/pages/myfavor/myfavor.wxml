@@ -19,7 +19,7 @@
               <text class="date">出版社：{{ item.publisher }}</text>
               <text class="date">出版日期：{{ item.pubdate }}</text>
               <text class="date">索书号：{{ item.callno }}</text>
-              <text class="date">赞数：{{ item.like }}</text>
+              <text class="date">读者评分：{{ item.avg_rate }}</text>
               <text class="date">馆藏数量：{{ item.collection_info.length }}</text>
             </view>
             <view class="cancel-btn">

@@ -31,10 +31,7 @@ Page({
 
     rate = (id == 'like') ? '赞' : '踩'
 
-    wx.navigateTo({
-      url: '../rate/rate?openid=' + this.data.wxUserInfo.openid + '&code=' + code,
-    })
-    /*wx.showModal({
+    wx.showModal({
       title: '评价确认',
       content: '您对该书籍的评价为：' + rate + '，一旦确认无法修改!',
       confirmText: '确认',
@@ -85,25 +82,67 @@ Page({
         }
 
       }
-    })*/
+    })
+  },
+
+  /**
+   * 评价按钮事件
+   */
+  rateBook: function (e) {
+    var index = e.currentTarget.dataset.index,
+        openid = this.data.wxUserInfo.openid
+
+    var bookInfo = this.data.b_list[index]
+    console.log(bookInfo)
+
+    wx.setStorage({
+      key: 'rateBookInfo',
+      data: bookInfo,
+      success: res => {
+
+        wx.navigateTo({
+          url: '../rate/rate?openid=' + openid
+        })
+
+      }
+    })
+
+
   },
 
   imageLoad: function () {
-    setTimeout(() => {
-      wx.hideLoading()
-    }, 500)
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
     var b_list = [],
       return_book = []
 
     wx.showLoading({
       title: '加载中',
-      mask: true
+      mask: true,
+      success: () => {
+        setTimeout(() => {
+          wx.hideLoading()
+        }, 500)
+      }
     })
 
     wx.getStorage({  // 从缓存中读取用户信息
@@ -137,29 +176,19 @@ Page({
 
             }
           })
-        }else {
+        } else {
+
+          this.setData({
+            b_list: []
+          })
 
           setTimeout(() => {
             wx.hideLoading()
           }, 500)
-          
+
         }
       },
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
   },
 
   /**

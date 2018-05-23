@@ -42,6 +42,7 @@
 }
 .search .search-scan {
   /* flex-grow: 1; */
+  margin-left: 20rpx;
   width: 40rpx;
   height: 40rpx;
 }

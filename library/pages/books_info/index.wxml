@@ -16,9 +16,9 @@
         <text>ISBN：{{ b_info.isbn13 }}</text>
       </view>
       <view class="cont-like">
-        <text wx:if="{{ b_info.callno }}" class="num">{{ b_info.like < 1000 ? b_info.like : '999+' }}</text>
+        <text wx:if="{{ b_info.avg_rate }}" class="num">{{ b_info.avg_rate }}</text>
         <text wx:else class="num">0</text>
-        <text class="text">赞数</text>  
+        <text class="text">读者评分</text>  
       </view>
     </view>
   </view>

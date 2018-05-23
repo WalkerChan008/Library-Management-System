@@ -1,39 +1,36 @@
 <!--pages/rate/rate.wxml-->
 <view class="page">
-    <view class="line"></view>
 
 
-      <view class="book-info">
-        <image class="book-img" src=""></image>
-        <view class="book-cont">
-          <text class="book-title">javascript权威指南javascript权威指南javascript权威指南javascript权威指南{{ item.title }}</text>
-          <text class="date">条码号：{{ item.return_info.code_39 }}</text>
-          <text class="date">索书号：{{ item.callno }}</text>
-          <text class="date">评分：8.5{{ item.like }}</text>
-        </view>
-      </view>
-
-    <!-- id="{{ item.loan_info.code_39 }}" -->
-
-
-  <view class="btm-line"></view>
-  <view class="rate-star">
-    <block wx:for="{{stars}}" wx:key="id">
-      <image class="star-image" style="left: {{item*150}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
-      <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
-      <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
-      </image>
-    </block>
-  </view>
-
-  <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell">
-        <view class="weui-cell__bd">
-          <textarea class="weui-textarea" placeholder="请输入文本" style="height: 3.3em" />
-          <view class="weui-textarea-counter">0/200</view>
-        </view>
+  <view class="book-info">
+    <image class="book-img" src="{{ b_info.images.large || b_info.image }}"></image>
+    <view class="book-cont">
+      <text class="book-title">{{ b_info.title }}</text>
+      <text class="date">条码号：{{ b_info.return_info.code_39 }}</text>
+      <text class="date">索书号：{{ b_info.callno }}</text>
+      <text class="date">评分：{{ b_info.like }}</text>
     </view>
   </view>
 
-  <button bindtap="submitRate">提交评价</button>
+    <!-- id="{{ item.loan_info.code_39 }}" -->
+
+  <view class="rate-wrap">
+    <text>评分：</text>
+    <view class="rate-star">
+      <block wx:for="{{stars}}" wx:key="id">
+        <image class="star-image" style="left: {{item*60}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+        <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
+        <view class="item" style="left:30rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+        </image>
+      </block>
+    </view>
+    <text>{{ key * 2 }}分</text>
+  </view>
+
+  <view class="rate-cont">
+    <textarea class="weui-textarea" placeholder="请输入评价" style="height: 3.3em" maxlength="200" bindinput="bindinput" />
+    <view class="weui-textarea-counter">{{ valueLen }}/200</view>
+  </view>
+
+  <button type="primary" bindtap="submitRate">提交评价</button>
 </view>

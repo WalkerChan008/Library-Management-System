@@ -83,10 +83,10 @@ var util = {
         });
     },
 
-    _sortByLike: function (collection_name, json) {
+    _sortByRate: function (collection_name, json) {
         return new Promise(function (resolve, reject) {
             connectDB(function (db) {
-                var result = db.collection(collection_name).find(json).sort({like: -1}).limit(10);
+                var result = db.collection(collection_name).find(json).sort({avg_rate: -1});
                 resolve(result.toArray());
             });
         })

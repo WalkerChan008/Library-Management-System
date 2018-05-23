@@ -12,7 +12,8 @@
     "pages/lib_auth/lib_auth",
     "pages/myfavor/myfavor",
     "pages/massage/massage",
-    "pages/rate/rate"
+    "pages/rate/rate",
+    "pages/operate_result/ope_res"
     
   ],
   "window": {

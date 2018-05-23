@@ -124,13 +124,12 @@ model = {
         db._find('books_info', {isbn13: isbn}, {_id: 0})
             .then( (data) => {
 
-                if(String(data)) {
-                    console.log('cnmb')
+                if(String(data)) {  // 数据库存在该书数据
                     console.log(data)
                     this.formatData(data);
                     res.jsonp(data);
                     res.end();
-                } else {
+                } else {  // 数据库无此条数据时
                     this.getBookByISBN(isbn).then( (result) => {
                         console.log(result);
                         db._insert('books_info', result)
@@ -288,8 +287,9 @@ model = {
     getHotTop10: function (res) {
         var db = this.db;
 
-        db._sortByLike('books_info', {like: {$exists: true}})
+        db._sortByRate('books_info', {avg_rate: {$exists: true}})
             .then( (data) => {
+                console.log(data);
                 this.formatData(data);
                 res.jsonp(data);
                 res.end();
@@ -663,33 +663,21 @@ model = {
     rateBook: function (query, res) {
         var db = this.db;
 
-        var code = query.code,  // 该书本的code_39
-            rate = query.rate,  // 赞 or 踩
-            openid = query.openid;  // 评价人id
-
-        var addLike = (rate == 'like') ? 1 : 0;
+        var openid = query.openid,  // 评价人id
+            code = query.code_39,  //
+            isbn13 = query.isbn13, 
+            rateScore = parseInt(query.rateScore),
+            rateValue = query.rateValue;
 
         var rateDate = new Date().format('yyyy-MM-dd'); // 评价时间
 
         var json1 = {   // 查找并更新条件
-            filter: {   // 查找条件 field必须为filter
-                collection_info: {
-                    $elemMatch: {     // 查询内嵌文档
-                        code_39: code
-                    }
-                }
-            },
-            update: {   // 更新内容 field必须为update
-                $inc: {
-                    like: addLike
-                }
-            },
-            options: {   // 返回值选项 field必须为options
-                projection: {   // 返回值筛选
-                    _id: 0
-                },
-                returnOriginal: false    // 返回更新后的数据
-            }
+            openid: openid,
+            code_39: code,
+            isbn13: isbn13,
+            rate_score: rateScore,
+            rate_value: rateValue,
+            rate_date: rateDate
         };
 
         var json2 = {   // 查找并更新条件
@@ -703,9 +691,9 @@ model = {
             },
             update: {   // 更新内容 field必须为update
                 $set: {
-                    'loan_history.$.rate': rate,
                     'loan_history.$.is_rated': true,
-                    'loan_history.$.rate_date': rateDate
+                    'loan_history.$.rate_date': rateDate,
+                    'loan_history.$.rate_score': rateScore
                 },
                 $pull: {
                     return_book: code
@@ -719,14 +707,69 @@ model = {
             }
         };
 
-        var updateBookInfo = db._findOneAndUpdate('books_info', json1),
-            updateUserInfo = db._findOneAndUpdate('wx_user', json2);
+        var json3 = {};
 
-        Promise.all([updateBookInfo, updateUserInfo])
+        var insertBookRate = db._insert('books_rate', json1),
+            updateUserInfo = db._findOneAndUpdate('wx_user', json2),
+            updateBookInfo = db._findOneAndUpdate;
+
+        // this.getAvgRate(isbn13)
+
+        Promise.all([insertBookRate, updateUserInfo])
                 .then( data => {
                     res.jsonp(data);
                     res.end();
+
+                    return this.getAvgRate(isbn13)
                 })
+                .then( data => {
+                    json3 = {
+                        filter: {   // 查找条件 field必须为filter
+                            isbn13: isbn13
+                        },
+                        update: {   // 更新内容 field必须为update
+                            $set: {
+                                avg_rate: data
+                            }
+                        },
+                        options: {   // 返回值选项 field必须为options
+                            projection: {   // 返回值筛选
+                                _id: 0
+                            },
+                            returnOriginal: false    // 返回更新后的数据
+                        }
+                    }
+                    return updateBookInfo('books_info', json3);
+                })
+                .then( data => {
+
+                })
+    },
+
+    /**
+     * 点赞书籍接口
+     * @param {Object} query - 
+     * @param res - 响应参数
+     */
+    getAvgRate: function (isbn13) {
+        var db = this.db;
+
+        var sumScore = 0,
+            avgScore = 0;
+
+        return new Promise( (resolve, reject) => {
+
+            db._find('books_rate', {isbn13: isbn13})
+            .then( (data) => {
+                data.forEach( (item, index) => {
+                    sumScore += item.rate_score;
+                })
+                avgScore = Number((sumScore / data.length).toFixed(1));
+                resolve(avgScore);
+            })
+
+        })
+
     },
 
     /**

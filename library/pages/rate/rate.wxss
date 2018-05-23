@@ -1,8 +1,19 @@
 /* pages/rate/rate.wxss */
+page {
+  width: 100vw;
+  background-color: #f6f6f6;
+}
+
+.page {
+  margin: 20rpx;
+  background: #fff;
+}
+
 .book-info {
   display: flex;
   position: relative;
   padding: 20rpx;
+  border-bottom: 10rpx solid #f6f6f6;
   box-sizing: border-box;
 }
 .book-img {
@@ -37,22 +48,33 @@
   color: #aaa;
 }
 
-
+.rate-wrap {
+  display: flex;
+  padding: 20rpx;
+  border-bottom: 10rpx solid #f6f6f6;
+}
+.rate-wrap text {
+  color: #b2b2b2;
+}
 .rate-star {
   position: relative;
-  height: 150rpx;
+  width: 320rpx;
+  height: 60rpx;
 }
 .star-image {
   position: absolute;
-  top: 50rpx;
-  width: 150rpx;
-  height: 150rpx;
+  width: 60rpx;
+  height: 60rpx;
   src: "../../images/normal.png";
 }
-
 .item {
   position: absolute;
   top: 0rpx;
-  width: 75rpx;
-  height: 150rpx;
+  width: 30rpx;
+  height: 60rpx;
+}
+
+.rate-cont {
+  padding: 20rpx;
+  border-bottom: 20rpx solid #f6f6f6;
 }

@@ -13,7 +13,7 @@
             <text class="book-title">{{ item.title }}</text>
             <text class="date author">作者：{{ item.author }}</text>
             <text class="date">索书号：{{ item.callno }}</text>
-            <text class="date">所给评价：{{ item.loan_history.rate == 'like' ? '赞' : '踩' }}</text>
+            <text class="date">所给评价：{{ item.loan_history.rate_score }}分</text>
           </view>
         </view>
       </view>

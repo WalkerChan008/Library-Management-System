@@ -49,6 +49,12 @@
 					"name": "rate",
 					"pathName": "pages/rate/rate",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "operate",
+					"pathName": "pages/operate_result/ope_res",
+					"query": ""
 				}
 			]
 		}
