@@ -1,0 +1,65 @@
+<!--pages/command/command.wxml-->
+<view class="page">
+
+  <form bindsubmit="bindSubmit" bindreset="bindReset">
+
+    <view class="weui-cells__title">图书推荐</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+                <view class="weui-label">书名</view>
+            </view>
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="书名（必填）" name="title" value="{{ value }}" />
+            </view>
+        </view>
+
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+                <view class="weui-label">作者</view>
+            </view>
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="作者（选填）" name="author" />
+            </view>
+        </view>
+
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+                <view class="weui-label">出版社</view>
+            </view>
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="出版社（选填）" name="publisher" />
+            </view>
+        </view>
+    </view>
+
+    <view class="weui-cells__title">联系方式（至少添一项）</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+                <view class="weui-label">微信号</view>
+            </view>
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="请输入微信号" name="wechat" />
+            </view>
+        </view>
+
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+                <view class="weui-label">手机号</view>
+            </view>
+            <view class="weui-cell__bd">
+                <input type="number" class="weui-input" placeholder="请输入手机号" name="phone" maxlength="11" />
+            </view>
+        </view>
+
+    </view>
+
+    <view class="btn-area">
+      <button form-type="submit" type="primary">提交</button>
+      <button form-type="reset" type="warn">清空</button>
+    </view>
+
+  </form>
+
+</view>

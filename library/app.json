@@ -13,7 +13,9 @@
     "pages/myfavor/myfavor",
     "pages/massage/massage",
     "pages/rate/rate",
-    "pages/operate_result/ope_res"
+    "pages/operate_result/ope_res",
+    "pages/command/command",
+    "pages/news_list/news_list"
     
   ],
   "window": {

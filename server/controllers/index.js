@@ -91,6 +91,11 @@ router.get('/command', function (req, res) {
     model.command(req.query, res);
 });
 
+router.post('/addCommand', function (req, res) {
+    var commandObj = req.body;
+    model.addCommand(commandObj);
+});
+
 
 
 

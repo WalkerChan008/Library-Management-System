@@ -234,6 +234,13 @@ Page({
 
             if (res.confirm) {
 
+              wx.showToast({
+                title: '推荐成功',
+                icon: 'success',
+                duration: 1000,
+                mask: true
+              })
+
               wx.request({
                 url: this.url + '/command',
                 data: {

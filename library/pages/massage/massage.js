@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    msg_count: 0,
     loan_msg: []
   },
 
@@ -49,7 +50,8 @@ Page({
             success: res => {
               console.log(res.data)
               this.setData({
-                loan_msg: res.data
+                loan_msg: res.data,
+                msg_count: res.data.length
               })
             }
           })

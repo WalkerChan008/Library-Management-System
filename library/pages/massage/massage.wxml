@@ -1,7 +1,7 @@
 <!--pages/massage/massage.wxml-->
 <view class="page">
   <view class="weui-panel weui-panel_access">
-      <view class="weui-panel__hd">未读消息</view>
+      <view class="weui-panel__hd">未读消息 <text>{{ msg_count }}</text> 条</view>
       <view class="weui-panel__bd">
         <block wx:for="{{loan_msg}}" wx:key="id">
           <view class="weui-media-box weui-media-box_text">

@@ -13,17 +13,17 @@
   </view>
 
   <!-- 消息滚动 start -->
-  <view class="wrap-swiper">
-    <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="3000">
-      <block wx:for="{{msgList}}" wx:key="*this">
-        <navigator url="/pages/index/index?title={{item.url}}" open-type="navigate">
+  <navigator url="../news_list/news_list">
+    <view class="wrap-swiper">
+      <swiper class="swiper_container" vertical="true" autoplay="true" circular="true" interval="3000">
+        <block wx:for="{{msgList}}" wx:key="*this">
           <swiper-item>
             <view class="swiper_item">{{item.title}}</view>
           </swiper-item>
-        </navigator>
-      </block>
-    </swiper>
-  </view>
+        </block>
+      </swiper>
+    </view>
+  </navigator>
   <!-- 消息滚动 end -->
 
   <view class="read-img">

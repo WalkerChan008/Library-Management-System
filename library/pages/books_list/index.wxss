@@ -79,3 +79,19 @@
   font-size: 30rpx;
   color: #aaa;
 }
+
+.command {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 10rpx solid #eee;
+}
+.command text {
+  padding: 40rpx;
+  font-size: 32rpx;
+  color: #999;
+}
+.command button {
+  padding: 0 30rpx;
+  font-size: 32rpx;
+}

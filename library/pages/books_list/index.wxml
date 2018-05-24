@@ -21,4 +21,11 @@
     </block>
   </view>
 
+  <!-- 图书推荐 start -->
+  <view class="command">
+    <text>没有找到想要的书，去图书推荐吧</text>
+    <button type="primary" plain="true" bindtap="command">图书推荐</button>
+  </view>
+  <!-- 图书推荐 end -->
+
 </view>

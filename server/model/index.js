@@ -239,6 +239,18 @@ model = {
             json = {
                 $or: [
                     { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {author: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {publisher: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {author: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {publisher: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{author: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{publisher: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {author: new RegExp(valueArr[1], 'ig')}, {publisher: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{title: new RegExp(valueArr[0], 'ig')}, {publisher: new RegExp(valueArr[1], 'ig')}, {author: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{author: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {publisher: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{author: new RegExp(valueArr[0], 'ig')}, {publisher: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{publisher: new RegExp(valueArr[0], 'ig')}, {title: new RegExp(valueArr[1], 'ig')}, {author: new RegExp(valueArr[2], 'ig')}] },
+                    { $and: [{publisher: new RegExp(valueArr[0], 'ig')}, {author: new RegExp(valueArr[1], 'ig')}, {title: new RegExp(valueArr[2], 'ig')}] },
                 ]
             }
         }else {
@@ -898,6 +910,12 @@ model = {
         }
     },
 
+    /**
+     * 图书推荐 1
+     * 扫码进入详情后推荐
+     * @param {Object} data - isbn + openid
+     * @param res - 响应参数
+     */
     command: function (data, res) {
         var db = this.db;
 
@@ -943,9 +961,21 @@ model = {
 
         Promise.all([updateBookInfo, updateUserInfo])
             .then( data => {
+                this.addCommand({ openid: openid, isbn13: isbn })
                 res.jsonp(data);
                 res.end();
             })
+    },
+
+    /**
+     * 图书推荐 2
+     * 关键字搜索不到 推荐
+     * @param {Object} commandObj
+     */
+    addCommand: function (commandObj) {
+        var db = this.db;
+
+        db._insert('command_list', commandObj);
     }
 }
 

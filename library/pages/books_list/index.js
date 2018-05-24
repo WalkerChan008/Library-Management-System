@@ -7,8 +7,15 @@ Page({
    * 页面的初始数据
    */
   data: {
+    searchValue: '',
     list_count: 0,
     b_list: []
+  },
+
+  command: function () {
+    wx.navigateTo({
+      url: '../command/command?value=' + this.data.searchValue
+    })
   },
 
   imageLoad: function () {
@@ -30,6 +37,10 @@ Page({
     if(options.value) {
       wx.setNavigationBarTitle({
         title: '搜索 ' + options.value
+      })
+
+      this.setData({
+        searchValue: options.value
       })
     }
 
