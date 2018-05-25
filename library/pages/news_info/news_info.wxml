@@ -1,0 +1,15 @@
+<!--pages/news_info/news_info.wxml-->
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-article">
+            <view class="weui-article__h1">{{ newsInfo.title }}</view>
+  
+                <view class="weui-article__section">
+                    <view class="weui-article__p">{{ newsInfo.cont }}</view>
+                    <view class="weui-article__p">
+                        <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" />
+                    </view>
+                </view>
+        </view>
+    </view>
+</view>

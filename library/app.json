@@ -15,7 +15,8 @@
     "pages/rate/rate",
     "pages/operate_result/ope_res",
     "pages/command/command",
-    "pages/news_list/news_list"
+    "pages/news_list/news_list",
+    "pages/news_info/news_info"
     
   ],
   "window": {

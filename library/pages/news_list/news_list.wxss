@@ -1,1 +1,21 @@
 /* pages/news_list/news_list.wxss */
+page,
+.page,
+.page__bd{
+    height: 100%;
+}
+.page__bd{
+    padding-bottom: 0;
+}
+.weui-tab__content{
+    padding-top: 20rpx;
+}
+
+.weui-cell__bd.weui-cell_primary {
+  overflow: hidden;
+}
+.title {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

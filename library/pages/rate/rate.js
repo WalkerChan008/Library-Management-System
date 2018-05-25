@@ -79,6 +79,10 @@ Page({
                 key: 'wxUserInfo',
                 data: res.data[1].value,
               })
+
+              wx.removeStorage({
+                key: 'rateBookInfo'
+              })
             }
 
           })

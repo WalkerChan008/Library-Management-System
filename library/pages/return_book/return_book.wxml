@@ -15,7 +15,7 @@
             <text class="book-title">{{ item.title }}</text>
             <text class="date">索书号：{{ item.callno }}</text>
             <text class="date">条码号：{{ item.return_info.code_39 }}</text>
-            <text class="date">已赞数：{{ item.like }}</text>
+            <text class="date">读者评分：{{ item.avg_rate }}</text>
             <view class="ret-btn">
               <button size="mini" type="primary" plain="true" bindtap="rateBook" data-index="{{ index }}">评价</button>
             </view>

@@ -8,7 +8,7 @@
       <text class="book-title">{{ b_info.title }}</text>
       <text class="date">条码号：{{ b_info.return_info.code_39 }}</text>
       <text class="date">索书号：{{ b_info.callno }}</text>
-      <text class="date">评分：{{ b_info.like }}</text>
+      <text class="date">评分：{{ b_info.avg_rate }}</text>
     </view>
   </view>
 

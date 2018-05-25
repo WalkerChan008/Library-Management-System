@@ -976,6 +976,15 @@ model = {
         var db = this.db;
 
         db._insert('command_list', commandObj);
+    },
+
+    getNews: function (req, res) {
+        var db = this.db;
+
+        db._find('lib_news', {}).then( (data) => {
+            res.jsonp(data[0]);
+            res.end();
+        })
     }
 }
 

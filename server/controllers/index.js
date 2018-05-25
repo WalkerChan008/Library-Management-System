@@ -96,6 +96,11 @@ router.post('/addCommand', function (req, res) {
     model.addCommand(commandObj);
 });
 
+router.get('/getNews', function (req, res) {
+    model.getNews(req, res);
+});
+
+
 
 
 
