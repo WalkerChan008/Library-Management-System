@@ -13,9 +13,34 @@ Page({
   },
 
   command: function () {
-    wx.navigateTo({
-      url: '../command/command?value=' + this.data.searchValue
+    wx.getStorage({
+      key: 'wxUserInfo',
+      success: res => {
+        console.log(res.data.openid)
+        if(res.data.openid) {
+          wx.navigateTo({
+            url: '../command/command?value=' + this.data.searchValue
+          })
+        }
+
+      },
+      fail: res => {
+        wx.showModal({
+          title: '操作失败',
+          content: '小程序未通过微信授权登录。是否前往登录？',
+          success: res => {
+            if (res.confirm) {
+
+              wx.reLaunch({
+                url: '../mine/mine',
+              })
+
+            }
+          }
+        })
+      }
     })
+
   },
 
   imageLoad: function () {
@@ -62,6 +87,7 @@ Page({
 
       }
     })
+
   },
 
   /**

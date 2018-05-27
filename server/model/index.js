@@ -301,7 +301,6 @@ model = {
 
         db._sortByRate('books_info', {avg_rate: {$exists: true}})
             .then( (data) => {
-                console.log(data);
                 this.formatData(data);
                 res.jsonp(data);
                 res.end();
@@ -309,6 +308,10 @@ model = {
             .catch( (error) => {
                 console.log(error);
             })
+    },
+
+    toFixedRate: function () {
+        
     },
 
     getUserInfo: function (openid, res) {

@@ -20,7 +20,7 @@ Page({
     openid: '',
   },
 
-  //点击右边,半颗星
+  //点击左边,半颗星
   selectLeft: function (e) {
     var key = e.currentTarget.dataset.key
     if (this.data.key == 0.5 && e.currentTarget.dataset.key == 0.5) {
@@ -33,7 +33,7 @@ Page({
     })
 
   },
-  //点击左边,整颗星
+  //点击右边边,整颗星
   selectRight: function (e) {
     var key = e.currentTarget.dataset.key
     console.log("得" + key * 2 + "分")
