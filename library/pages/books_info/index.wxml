@@ -104,6 +104,29 @@
   </view>
   <!-- 折叠列表 end -->
 
+  <view class="book-box">
+    <text class="box-title">读者评价</text>
+    <view class="rate-list">
+      <block wx:for="{{  }}" wx:key="id">
+        <view class="rate-item">
+          <image class="avatar-url"></image>
+          <view class="item-right">
+            <text class="reader-name">BFWalker</text>
+            <view class="score-wrap">
+              <text class="rate-score">评分</text>
+              <!-- <image mode="top" src="../../images/rating.png"></image> -->
+              <view class="rate-star">
+                <image src="../../images/rating.png"></image>
+              </view>
+            </view>
+            <view class="rate-cont">这是一段很长的内容这是一段很长的内容这是一段很长的内容</view>
+            <view class="rate-date">2018-4-12</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
   <view class="fill"></view>
 
 </view>

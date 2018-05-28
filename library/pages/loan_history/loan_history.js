@@ -41,12 +41,22 @@ Page({
       success: res => {
         console.log(res.data.loan_history)
         loan_history = res.data.loan_history || []
+
         // loan_history = loan_history ? loan_history : []
 
         // 未完成借书归还评价流程 借阅历史不展示
-        loan_history.forEach( (item, index) => {
+        for(var i = 0; i < loan_history.length; i ++) {
+          if (!loan_history[i].is_rated) {
+            loan_history.remove(i)
+            i --
+          }
+        }
+
+        // 未完成借书归还评价流程 借阅历史不展示
+        /*loan_history.forEach( (item, index) => {
           item.is_rated ? '' : loan_history.remove(index)
-        })
+          console.log(index)
+        })*/
 
         console.log(loan_history);
 

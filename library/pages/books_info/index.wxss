@@ -171,6 +171,66 @@
   color: #1b82d1;
 }
 
+
+.rate-list {
+  
+}
+.rate-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1px solid #eee;
+}
+.rate-item .avatar-url {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background-color: red;
+}
+.rate-item .item-right {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.rate-item .reader-name {
+  font-size: 16px;
+  color: #000;
+}
+.rate-item .score-wrap {
+  display: flex;
+  align-items: center;
+}
+.score-wrap .rate-score {
+  padding-right: 10rpx;
+  font-size: 15px;
+  color: #ccc;
+}
+.score-wrap .rate-star {
+  position: relative;
+  width: 75px;
+  height: 15px;
+  overflow: hidden;
+}
+.score-wrap .rate-star image {
+  position: absolute;
+  top: 0px;
+  width: 75px;
+  height: 165px;
+}
+.rate-item .rate-cont {
+  margin-top: 20rpx;
+  font-size: 14px;
+}
+.rate-item .rate-date {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+
 .fill {
   height: 100rpx;
 }

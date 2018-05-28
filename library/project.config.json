@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 8,
 			"list": [
 				{
 					"id": 0,
@@ -73,6 +73,18 @@
 					"name": "新闻公告",
 					"pathName": "pages/news_list/news_list",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "图书详情",
+					"pathName": "pages/books_hot/hot",
+					"query": "code_type=isbn&result=9787508622187"
+				},
+				{
+					"id": 8,
+					"name": "图书详情",
+					"pathName": "pages/books_info/index",
+					"query": "code_type=isbn&result=9787111376613"
 				}
 			]
 		}

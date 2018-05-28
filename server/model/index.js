@@ -125,8 +125,7 @@ model = {
             .then( (data) => {
 
                 if(String(data)) {  // 数据库存在该书数据
-                    console.log(data)
-                    this.formatData(data);
+                    data = this.toFixedRate(data);
                     res.jsonp(data);
                     res.end();
                 } else {  // 数据库无此条数据时
@@ -177,14 +176,7 @@ model = {
 
         db._find('books_info', code_39, {_id: 0})
             .then( (data) => {
-                /* this.getBookByISBN(data[0].isbn).then( (result) => {
-                    data[0] = Object.assign(data[0] || {}, result);
-                    this.formatData(data);
-                    console.log(data);
-                    res.jsonp(data);
-                    res.end();
-                }) */
-                // this.formatData(data);
+                data = this.toFixedRate(data);
                 res.jsonp(data);
                 res.end();
             })
@@ -301,7 +293,7 @@ model = {
 
         db._sortByRate('books_info', {avg_rate: {$exists: true}})
             .then( (data) => {
-                this.formatData(data);
+                data = this.toFixedRate(data);
                 res.jsonp(data);
                 res.end();
             })
@@ -310,8 +302,22 @@ model = {
             })
     },
 
-    toFixedRate: function () {
+    /**
+     * 保留小数点后一位
+     * @param data - 图书信息（数组）
+     */
+    toFixedRate: function (data) {
+        var toStr = Object.prototype.toString;
         
+        var dataArr = [];
+
+        toStr.call(data) == '[object Object]' ? dataArr.push(data) : dataArr = data;
+
+        dataArr.forEach( (item, index) => {
+            item['avg_rate'] = item['avg_rate'].toFixed(1);
+        })
+
+        return dataArr;
     },
 
     getUserInfo: function (openid, res) {
@@ -907,6 +913,7 @@ model = {
         } else {
             db._find('books_info', json, {_id: 0})
                 .then( (data) => {
+                    data = this.toFixedRate(data);
                     res.jsonp(data);
                     res.end();
                 })
