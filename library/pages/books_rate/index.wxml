@@ -1,0 +1,38 @@
+<!--pages/books_rate/index.wxml-->
+<view class="page">
+
+
+  <view class="book-info">
+    <image class="book-img" src="{{ b_info.images.large || b_info.image }}"></image>
+    <view class="book-cont">
+      <text class="book-title">{{ b_info.title }}</text>
+      <text class="date">
+        <text class="author">作者：{{ b_info.author }}</text>
+      </text>
+      <text class="date">索书号：{{ b_info.callno }}</text>
+      <text class="date">评分：{{ b_info.avg_rate }}</text>
+    </view>
+  </view>
+
+  <view class="rate-list">
+      <block wx:for="{{ rate_list }}" wx:key="id"> 
+        <view class="rate-item">
+          <image class="avatar-url" src="{{ item.avatarUrl }}"></image>
+          <view class="item-right">
+            <text class="reader-name">{{ item.nickName }}</text>
+            <view class="score-wrap">
+              <text class="rate-score">评分</text>
+              <view class="rate-star">
+                <image src="../../images/rating.png" style="top: {{ -15 * (10 - item.rate_score) + 'px' }}"></image>
+              </view>
+            </view>
+            <view class="rate-cont">{{ item.rate_value }}</view>
+            <view class="rate-date">{{ item.rate_date }}</view>
+          </view>
+        </view>
+      </block> 
+    </view>
+
+
+
+</view>

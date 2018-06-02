@@ -1,4 +1,4 @@
-// pages/news_info/news_info.js
+// pages/books_rate/index.js
 Page({
 
   url: require('../../config.js'),
@@ -7,50 +7,39 @@ Page({
    * 页面的初始数据
    */
   data: {
-    newsInfo: {}
+    b_info: {},
+
+    rate_list: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // options.type  options.id
-    var allNews = {},
-        newsArr = [],
-        newsInfo = {}
-
-    wx.showToast({
-      icon: 'loading',
-      title: '加载中',
-      duration: 500
-    })
-
     wx.getStorage({
-      key: 'news',
-      success: (res) => {
-        allNews = res.data
-        switch(options.type) {
-          case 'news':
-            newsArr = allNews.news
-            break
-          case 'notice':
-            newsArr = allNews.notice
-            break
-          case 'resource':
-            newsArr = allNews.resource
-            break
-        }
-
-        newsArr.forEach( (item, index) => {
-          item.id == options.id ? newsInfo = item : ''
-        })
-
-        console.log(newsInfo)
+      key: 'b_info',
+      success: res => {
+        // res.data - 图书信息
+        var b_info = res.data,
+            isbn = b_info.isbn13
 
         this.setData({
-          newsInfo: newsInfo
+          b_info: b_info
         })
-      },
+
+        wx.request({
+          url: this.url + '/showAllRate',
+          data: {
+            isbn: isbn,
+            count: 10
+          },
+          success: res => {
+            this.setData({
+              rate_list: res.data
+            })
+          }
+        })
+      }
     })
   },
 
@@ -65,7 +54,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+
   },
 
   /**
@@ -79,7 +68,9 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    wx.removeStorage({
+      key: 'b_info'
+    })
   },
 
   /**

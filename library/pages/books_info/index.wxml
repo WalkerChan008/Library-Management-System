@@ -104,28 +104,38 @@
   </view>
   <!-- 折叠列表 end -->
 
+  <!-- 评价栏 start -->
   <view class="book-box">
-    <text class="box-title">读者评价</text>
+    <text class="box-title">读者评论</text>
     <view class="rate-list">
-      <block wx:for="{{  }}" wx:key="id">
+      <block wx:for="{{ rate_list }}" wx:key="id">
         <view class="rate-item">
-          <image class="avatar-url"></image>
+          <image class="avatar-url" src="{{ item.avatarUrl }}"></image>
           <view class="item-right">
-            <text class="reader-name">BFWalker</text>
+            <text class="reader-name">{{ item.nickName }}</text>
             <view class="score-wrap">
               <text class="rate-score">评分</text>
               <!-- <image mode="top" src="../../images/rating.png"></image> -->
               <view class="rate-star">
-                <image src="../../images/rating.png"></image>
+                <image src="../../images/rating.png" style="top: {{ -15 * (10 - item.rate_score) + 'px' }}"></image>
               </view>
             </view>
-            <view class="rate-cont">这是一段很长的内容这是一段很长的内容这是一段很长的内容</view>
-            <view class="rate-date">2018-4-12</view>
+            <view class="rate-cont">{{ item.rate_value }}</view>
+            <view class="rate-date">{{ item.rate_date }}</view>
           </view>
         </view>
       </block>
     </view>
+
+    <view wx:if="{{ rate_list.length == 0 }}" style="font-size:30rpx;">无</view>
+
+    <view wx:if="{{ rate_list.length == 3 }}" class="read-more weui-cell_link" bindtap="showRating">
+        <view class="weui-cell__bd">更多评论</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </view>
+
   </view>
+  <!-- 评价栏 end -->
 
   <view class="fill"></view>
 

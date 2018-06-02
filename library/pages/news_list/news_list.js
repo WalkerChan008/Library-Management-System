@@ -32,8 +32,6 @@ Page({
    */
   onLoad: function (options) {
 
-    var allNews = {}
-
     wx.getSystemInfo({
       success: (res) => {
         this.setData({
@@ -42,6 +40,22 @@ Page({
         });
       }
     });
+
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+  
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
+    var allNews = {}
 
     wx.request({
       url: this.url + '/getNews',
@@ -64,20 +78,7 @@ Page({
 
       }
     })
-  },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
   },
 
   /**
@@ -91,7 +92,9 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    wx.removeStorage({
+      key: 'news'
+    })
   },
 
   /**

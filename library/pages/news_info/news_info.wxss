@@ -1,7 +1,57 @@
 /* pages/news_info/news_info.wxss */
 page{
-    background-color: #FFFFFF;
+
+  background-color: #fff;
+}
+.page {
+  position: relative;
+  min-height: 100vh;
+  border-top: 1px solid #eee;
+  box-sizing: border-box;
 }
 image{
     margin: 4px 0;
+}
+
+.weui-article__h1 {
+  padding: 20rpx;
+  margin-bottom: 2em;
+  font-size: 15px;
+  color: #2f4f4f;
+  background-color: #c3e5f8;
+  border: 1px solid #00bfff;
+  border-radius: 5px;
+}
+
+.pub-cont {
+  font-size: 14px;
+  color: #999;
+}
+.pub-cont::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.publisher {
+  margin-right: 20rpx;
+}
+.pubtime {
+  float: right;
+}
+
+.weui-article__section {
+  padding: 20rpx;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.article-cont {
+  text-indent: 2em;
+}
+
+.page__ft {
+  position: absolute;
+  left: 50%;
+  bottom: 20rpx;
+  transform: translateX(-50%);
 }

@@ -4,12 +4,20 @@
         <view class="weui-article">
             <view class="weui-article__h1">{{ newsInfo.title }}</view>
   
+                <view class="pub-cont">
+                  <text class="publisher">发布人：{{ newsInfo.publisher }}</text>
+                  <text class="pubtime">时间：{{ newsInfo.pubtime }}</text>
+                </view>
+
                 <view class="weui-article__section">
-                    <view class="weui-article__p">{{ newsInfo.cont }}</view>
-                    <view class="weui-article__p">
-                        <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" />
-                    </view>
+                  <block wx:for="{{ newsInfo.cont }}" wx:key="id">
+                    <view class="article-cont">{{ item }}</view>
+                  </block>
                 </view>
         </view>
     </view>
+    
+    <view class="page__ft">
+      <view class="weui-footer__text">© 2018 - 图书馆服务平台</view>
+  </view>
 </view>

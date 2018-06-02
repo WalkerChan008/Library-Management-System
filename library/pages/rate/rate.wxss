@@ -20,7 +20,6 @@ page {
   width: 154rpx;
   max-width: 27%;
   height: 216rpx;
-  background: red;
 }
 .book-cont {
   display: flex;

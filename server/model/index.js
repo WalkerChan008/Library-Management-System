@@ -18,7 +18,7 @@ Date.prototype.format = function(fmt) {
        "S"  : this.getMilliseconds()             //毫秒 
    }; 
    if(/(y+)/.test(fmt)) {
-           fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+           fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
    }
     for(var k in o) {
        if(new RegExp("("+ k +")").test(fmt)){
@@ -314,7 +314,9 @@ model = {
         toStr.call(data) == '[object Object]' ? dataArr.push(data) : dataArr = data;
 
         dataArr.forEach( (item, index) => {
-            item['avg_rate'] = item['avg_rate'].toFixed(1);
+            if(item['avg_rate']) {
+                item['avg_rate'] = item['avg_rate'].toFixed(1);
+            }
         })
 
         return dataArr;
@@ -336,15 +338,40 @@ model = {
     saveUserInfo: function (req, res) {
         // req.body
         var db = this.db;
+
+        console.log(req.body.nickName)
+
+        var json = {
+            filter: {
+                openid: req.body.openid
+            },
+            update: {
+                $set: {
+                    nickName: req.body.nickName,
+                    avatarUrl: req.body.avatarUrl
+                }
+            },
+            options: {
+                projection: {   // 返回值筛选
+                    _id: 0
+                },
+                returnOriginal: false    // 返回更新后的数据
+            }
+        }
+
         var ops = {};
         db._find('wx_user', {openid: req.body.openid}, {_id: 0})
             .then( data => {
                 // 判断该用户是否存在于数据库
                 if(data.length > 0) {    // 存在 将该条数据返回
-                    console.log('用户数据已存在！');
-                    console.log(data)
-                    res.jsonp(data[0]);
-                    res.end();
+                    console.log('用户数据已存在！更新头像和名称...');
+                    db._findOneAndUpdate('wx_user', json)
+                    .then( data => {
+                        res.jsonp(data.value);
+                        res.end();
+                    })
+                    // res.jsonp(data[0]);
+                    // res.end();
                 }else {    // 不存在 插入该条数据
                     db._insert('wx_user', req.body)
                         .then( data => {
@@ -359,18 +386,7 @@ model = {
                         })
                 }
             })
-            .catch( error => {
-                console.log('find data error !')
-            })
-        
 
-        /* db._insert('wx_user', req.body)
-            .then( data => {
-                console.log('insert success !')
-            })
-            .catch( error => {
-                console.log('insert error !');
-            }) */
     },
 
     /**
@@ -988,6 +1004,10 @@ model = {
         db._insert('command_list', commandObj);
     },
 
+    /**
+     * 获取新闻公告数据
+     * @param 
+     */
     getNews: function (req, res) {
         var db = this.db;
 
@@ -995,7 +1015,61 @@ model = {
             res.jsonp(data[0]);
             res.end();
         })
+    },
+
+    /**
+     * 图书详情界面展示读者评价
+     * @param {String} isbn - 图书isbn码
+     */
+    showBookRate: function (isbn, res) {
+        var db = this.db;
+
+        var rateArr = [];
+
+        db._find('books_rate', {isbn13: isbn}, {_id: 0}, {_id: -1}, 3)
+            .then( data1 => {
+                data1.forEach( (item, index) => {
+                    rateArr[index] = db._find('wx_user', {openid: item.openid}, {_id: 0, avatarUrl: 1, nickName: 1})
+                        .then( data2 => {
+                            Object.assign(item, data2[0]);
+                            if(index == data1.length - 1) {
+                                res.jsonp(data1);
+                                res.end();
+                            }
+                        })
+
+                })
+            })
+    },
+
+    /**
+     * 显示某图书的所有评价
+     * @param {String} query -
+     */
+    showAllRate: function (query, res) {
+        var db = this.db;
+
+        var isbn = query.isbn,
+            count = parseInt(query.count);
+
+        var rateArr = [];
+
+
+        db._find('books_rate', {isbn13: isbn}, {_id: 0}, {_id: -1}, count)
+            .then( data1 => {
+                data1.forEach( (item, index) => {
+                    rateArr[index] = db._find('wx_user', {openid: item.openid}, {_id: 0, avatarUrl: 1, nickName: 1})
+                        .then( data2 => {
+                            Object.assign(item, data2[0]);
+                            if(index == data1.length - 1) {
+                                res.jsonp(data1);
+                                res.end();
+                            }
+                        })
+                })
+            })
     }
+
 }
 
 module.exports = model;

@@ -19,3 +19,7 @@ page,
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.item-row {
+  border-bottom: 1px solid #eee;
+}

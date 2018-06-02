@@ -34,11 +34,14 @@ var util = {
      * @param collection_name - 集合名称
      * @param json - 查询条件
      */
-    _find: function (collection_name, json, projections) {
+    _find: function (collection_name, json, projections, sort, limit, skip) {
         projections = projections ? projections : {};
+        sort = sort || {};
+        limit = limit || 0;
+        skip = skip || 0;
         return new Promise(function (resolve, reject) {
             connectDB(function (db) {
-                var result = db.collection(collection_name).find(json).project(projections);
+                var result = db.collection(collection_name).find(json).sort(sort).skip(skip).limit(limit).project(projections);
                 resolve(result.toArray());
             });
         })

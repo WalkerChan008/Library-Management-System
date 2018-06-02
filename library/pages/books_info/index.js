@@ -10,10 +10,14 @@ Page({
    */
   data: {
     wxUserInfo: {},
-    isFold: true,    // 简介展开按钮
+
+    isFold: true,    // 图书简介是否折叠
+
     b_info : {},    // 图书信息
     list: [],      // 馆藏信息列表
-    favor_flag: false  // 是否收藏此书
+    favor_flag: false,  // 是否收藏此书
+
+    rate_list: [],   // 评价列表
   },
 
   /**
@@ -311,6 +315,23 @@ Page({
   },
 
   /**
+   * 跳转至图书评价查看界面
+   */
+  showRating: function () {
+    var b_info = this.data.b_info
+
+    wx.setStorage({
+      key: 'b_info',
+      data: b_info
+    })
+
+    wx.navigateTo({
+      url: '../books_rate/index'
+    })
+
+  },
+
+  /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
@@ -334,6 +355,25 @@ Page({
         isbn = b_info.isbn13
 
         console.log(b_info);
+
+        if(list.length > 0) {
+          console.log('图书馆藏中')
+          wx.request({  // 获取评价内容
+            url: this.url + '/showBookRate',
+            data: {
+              isbn: isbn
+            },
+            success: res => {
+              // res.data  评价栏内容
+              console.log(res.data)
+
+              this.setData({
+                rate_list: res.data
+              })
+            }
+          })
+        }
+
 
         this.setData({
           b_info: b_info,
@@ -367,6 +407,8 @@ Page({
         })
       }
     })
+
+
   },
 
   /**

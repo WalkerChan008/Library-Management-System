@@ -77,19 +77,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var wxUserInfo = {},
-        b_list = [],
-        favorBook = []
 
-    // wx.showToast({
-    //   title: '加载中',
-    //   icon: 'loading',
-    //   mask: true,
-    //   duration: 500
-    // })
-    wx.showLoading({
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+  
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    var wxUserInfo = {},
+      b_list = [],
+      favorBook = []
+
+    wx.showToast({
       title: '加载中',
-      mask: true
+      icon: 'loading',
+      duration: 500
     })
 
     wx.getStorage({
@@ -101,7 +110,7 @@ Page({
 
         console.log(res)
 
-        if(favorBook.length > 0) {
+        if (favorBook.length > 0) {
 
           wx.request({
             method: 'POST',
@@ -121,31 +130,19 @@ Page({
             }
           })
 
-        }else {
+        } else {
 
           setTimeout(() => {
-            wx.hideLoading()
+            wx.showToast({
+              icon: 'none',
+              title: '无结果',
+              duration: 1000
+            })
           }, 500)
 
         }
       },
     })
-
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
   },
 
   /**

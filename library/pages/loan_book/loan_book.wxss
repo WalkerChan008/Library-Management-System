@@ -73,3 +73,8 @@
   right: -10rpx;
   bottom: 10rpx;
 }
+.ret-btn button {
+  padding: 16rpx 32rpx;
+  font-size: 30rpx;
+  line-height: 1;
+}

@@ -1,0 +1,110 @@
+/* pages/books_rate/index.wxss */
+page {
+  width: 100vw;
+  /* background-color: #f6f6f6; */
+}
+
+.page {
+  padding: 20rpx;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.book-info {
+  display: flex;
+  position: relative;
+  padding: 20rpx;
+  border-bottom: 6rpx solid #f6f6f6;
+  box-sizing: border-box;
+}
+.book-img {
+  width: 154rpx;
+  max-width: 27%;
+  height: 216rpx;
+}
+.book-cont {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+  flex-flow: column nowrap;
+  margin-left: 30rpx;
+  width: 70%;
+}
+.book-cont .book-title {
+  margin-bottom: 10rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #424242;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.book-info .book-cont .date {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 30rpx;
+  color: #aaa;
+}
+.author {
+  width: 100%;
+}
+
+
+.rate-list {
+  margin-top: 20rpx;
+}
+.rate-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1px solid #eee;
+}
+.rate-item .avatar-url {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+}
+.rate-item .item-right {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.rate-item .reader-name {
+  font-size: 16px;
+  color: #000;
+}
+.rate-item .score-wrap {
+  display: flex;
+  align-items: center;
+}
+.score-wrap .rate-score {
+  padding-right: 10rpx;
+  font-size: 12px;
+  color: #ccc;
+}
+.score-wrap .rate-star {
+  position: relative;
+  width: 75px;
+  height: 15px;
+  overflow: hidden;
+}
+.score-wrap .rate-star image {
+  position: absolute;
+  top: 0px;
+  width: 75px;
+  height: 165px;
+}
+.rate-item .rate-cont {
+  margin-top: 20rpx;
+  font-size: 14px;
+}
+.rate-item .rate-date {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  font-size: 13px;
+  color: #ccc;
+}

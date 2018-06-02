@@ -102,7 +102,9 @@ Page({
         console.log(rank_list);
         this.setData({
           top1: top1,
-          rank_list: rank_list
+          rank_list: rank_list,
+
+          pickerIndex: 0
         })
       }
     })

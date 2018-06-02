@@ -116,7 +116,6 @@ Page({
                   url: this.url + '/getUserInfo',
                   data: { openid: res.data.openid },
                   success: res => {
-                    console.log(res);
                     this.setData({
                       wxUserInfo: res.data,
                       wxAuth: res.data.openid ? true : false

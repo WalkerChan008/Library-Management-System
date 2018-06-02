@@ -100,6 +100,16 @@ router.get('/getNews', function (req, res) {
     model.getNews(req, res);
 });
 
+router.get('/showBookRate', function (req, res) {
+    var isbn = req.query.isbn;
+    model.showBookRate(isbn, res);
+});
+
+router.get('/showAllRate', function (req, res) {
+    var query = req.query;
+    model.showAllRate(query, res);
+});
+
 
 
 
