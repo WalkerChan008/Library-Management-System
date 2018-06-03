@@ -45,9 +45,9 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 2,
 					"name": "rate",
-					"pathName": "pages/rate/rate",
+					"pathName": "pages/books_rate/index",
 					"query": ""
 				},
 				{
@@ -84,7 +84,7 @@
 					"id": 8,
 					"name": "图书详情",
 					"pathName": "pages/books_info/index",
-					"query": "code_type=isbn&result=9787121266775"
+					"query": "code_type=isbn&result=9787121109560"
 				},
 				{
 					"id": -1,

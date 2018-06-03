@@ -231,8 +231,8 @@ Page({
         })
       } else {
         wx.showModal({
-          title: '推荐购买',
-          content: '确认推荐购买此书吗？',
+          title: '图书推荐',
+          content: '确认向图书馆推荐此书吗？',
           confirmText: '确认',
           success: res => {
 

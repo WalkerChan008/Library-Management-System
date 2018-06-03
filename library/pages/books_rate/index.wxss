@@ -6,8 +6,13 @@ page {
 
 .page {
   padding: 20rpx;
+  max-height: 100vh;
   background: #fff;
   border-top: 1px solid #eee;
+  box-sizing: border-box;
+}
+scroll-view {
+  height: 920rpx;
 }
 
 .book-info {
@@ -52,11 +57,11 @@ page {
 
 
 .rate-list {
-  margin-top: 20rpx;
+  padding-top: 20rpx;
 }
 .rate-item {
   display: flex;
-  padding: 20rpx 0;
+  padding: 20rpx;
   border-bottom: 1px solid #eee;
 }
 .rate-item .avatar-url {
@@ -107,4 +112,9 @@ page {
   right: 0px;
   font-size: 13px;
   color: #ccc;
+}
+
+.weui-loadmore {
+  position: relative;
+  margin: 20rpx auto;
 }

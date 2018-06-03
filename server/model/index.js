@@ -1050,13 +1050,19 @@ model = {
         var db = this.db;
 
         var isbn = query.isbn,
-            count = parseInt(query.count);
+            count = 6,
+            skip = (parseInt(query.pageIndex) - 1) * count;
 
         var rateArr = [];
 
 
-        db._find('books_rate', {isbn13: isbn}, {_id: 0}, {_id: -1}, count)
+        db._find('books_rate', {isbn13: isbn}, {_id: 0}, {_id: -1}, count, skip)
             .then( data1 => {
+                if(data1.length === 0) {
+                    res.jsonp(data1);
+                    res.end();
+                    return;
+                }
                 data1.forEach( (item, index) => {
                     rateArr[index] = db._find('wx_user', {openid: item.openid}, {_id: 0, avatarUrl: 1, nickName: 1})
                         .then( data2 => {

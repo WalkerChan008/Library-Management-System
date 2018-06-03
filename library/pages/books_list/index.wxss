@@ -76,7 +76,7 @@
   -webkit-line-clamp: 3;
   overflow: hidden;
   padding-top: 10rpx;
-  font-size: 30rpx;
+  font-size: 26rpx;
   color: #aaa;
 }
 
@@ -93,6 +93,6 @@
   color: #999;
 }
 .command button {
-  padding: 0 30rpx;
-  font-size: 32rpx;
+  padding: 0 26rpx;
+  font-size: 28rpx;
 }
