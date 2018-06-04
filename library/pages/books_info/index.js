@@ -294,9 +294,6 @@ Page({
   },
 
   imageLoad: function () {
-    wx.showLoading({
-      title: '加载中',
-    })
     setTimeout(() => {
       wx.hideLoading()
       wx.showToast({
@@ -346,6 +343,10 @@ Page({
       favor_flag = false
 
     codeQuery = options  // {OBJECT} 码的类型 & 条码号
+
+    wx.showLoading({
+      title: '加载中',
+    })
 
     wx.request({    // 向后台发起请求，获取图书信息数据
       url: this.url + '/' + codeQuery.code_type + '_search?' + codeQuery.code_type + '=' + codeQuery.result,
@@ -407,7 +408,6 @@ Page({
         })
       }
     })
-
 
   },
 

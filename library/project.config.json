@@ -60,7 +60,7 @@
 					"id": 4,
 					"name": "图书列表",
 					"pathName": "pages/books_list/index",
-					"query": "value=战争"
+					"query": "value=java"
 				},
 				{
 					"id": 5,

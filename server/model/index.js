@@ -190,10 +190,15 @@ model = {
      * @param {String} value - 从前端返回的关键字
      * @param {Object} res - 通过res将数据传回前端
      */
-    getBooksInfoByValue: function (value, res) {
+    getBooksInfoByValue: function (query, res) {
         var db = this.db;
 
         var blankReg = /\s+/g;
+
+        var value = query.value,
+            count = 6,
+            skip = (parseInt(query.pageIndex) - 1) * count;
+
         value = value.replace(blankReg, ' ');
 
         var valueArr = value.split(' '),
@@ -252,16 +257,16 @@ model = {
             }
         }
 
+        var b_list = db._find('books_info', json, {_id: 0}, {}, count, skip),
+            b_len = db._find('books_info', json);
 
-        db._find('books_info', json)
-            .then( (data) => {
-                this.formatData(data);
+        Promise.all([b_list, b_len])
+            .then( data => {
+                data[1] = data[1].length;
                 res.jsonp(data);
                 res.end();
             })
-            .catch( (error) => {
-                console.log(error);
-            })
+
 
         
         /* this.getBookByValue(value).then( (result) => {

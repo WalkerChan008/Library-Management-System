@@ -2,6 +2,9 @@
 .container {
   
 }
+scroll-view {
+  height: 1142rpx;
+}
 
 .list-count {
   padding: 10rpx;
@@ -27,7 +30,7 @@
 }
 
 .list-item .book-img,
-.list-item cover-view {
+.list-item .cover-text {
   width: 192rpx;
   max-width: 27%;
   height: 270rpx;
@@ -36,7 +39,7 @@
   background-size: contain;
 }
 
-.list-item cover-view {
+.list-item .cover-text {
   display: flex;
   position: absolute;
   justify-content: center;
@@ -80,12 +83,17 @@
   color: #aaa;
 }
 
+.page__ft {
+  border-top: 10rpx solid #eee;
+}
+
+
 .command {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: 60rpx;
-  border-top: 10rpx solid #eee;
+  /* border-top: 10rpx solid #eee; */
 }
 .command text {
   padding: 40rpx;

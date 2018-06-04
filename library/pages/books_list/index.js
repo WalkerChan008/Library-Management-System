@@ -9,7 +9,13 @@ Page({
   data: {
     searchValue: '',
     list_count: 0,
-    b_list: []
+    b_list: [],
+
+    imageLoadFlag: true,
+
+    pageIndex: 1,
+    loading: true,
+    loadingComplete: false,
   },
 
   command: function () {
@@ -44,20 +50,74 @@ Page({
   },
 
   imageLoad: function () {
-    setTimeout( () => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '加载成功',
-        duration: 1000
+    var imageLoadFlag = this.data.imageLoadFlag
+
+    if (imageLoadFlag) {
+
+      setTimeout(() => {
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载成功',
+          duration: 1000
+        })
+      }, 500)
+
+      this.setData({
+        imageLoadFlag: false
       })
-    }, 500)
+    }
+
+  },
+
+  bookScrollToLower: function () {
+    var searchValue = this.data.searchValue,
+        b_list = this.data.b_list,
+        pageIndex = this.data.pageIndex + 1,
+        loading = this.data.loading,
+        loadingComplete = this.data.loadingComplete
+
+    var timer = undefined
+
+    if (loadingComplete) {
+      return false
+    }
+
+
+    wx.request({
+      url: this.url + '/value_search',
+      data: {
+        value: searchValue,
+        pageIndex: pageIndex
+      },
+      success: res => {
+        loadingComplete = (res.data[0].length == 0) ? true : false
+        loading = loadingComplete ? false : true
+
+        b_list = b_list.concat(res.data[0])
+
+        timer = setTimeout(() => {
+
+          this.setData({
+            b_list: b_list,
+            pageIndex: pageIndex,
+            loading: loading,
+            loadingComplete: loadingComplete,
+          })
+          clearTimeout(timer)
+
+        }, 300)
+
+      }
+    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var b_list = [];
+    var b_list = [],
+        list_count = 0,
+        pageIndex = this.data.pageIndex
 
     if(options.value) {
       wx.setNavigationBarTitle({
@@ -71,17 +131,23 @@ Page({
 
     console.log(options)
     wx.request({    // 向后台发起请求，获取图书列表信息
-      url: this.url + '/value_search?value=' + options.value,
-      success: (data) => {
-        console.log(data)
-        b_list = data.data;
+      url: this.url + '/value_search',
+      data: {
+        value: options.value,
+        pageIndex: pageIndex
+      },
+      success: res => {
+        // res.data[0] - 图书信息
+        // res.data[1] - 所有图书数量
+        b_list = res.data[0];
+        list_count = res.data[1]
 
         this.setData({
-          list_count: b_list.length,
+          list_count: list_count,
           b_list: b_list
         })
 
-        if(b_list.length == 0) {
+        if (list_count == 0) {
           wx.hideLoading()
         }
 

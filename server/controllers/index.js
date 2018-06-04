@@ -16,8 +16,8 @@ router.get('/code_search', function (req, res) {
 });
 
 router.get('/value_search', function (req, res) {
-    var value = req.query.value;
-    model.getBooksInfoByValue(value, res);
+    var query = req.query;
+    model.getBooksInfoByValue(query, res);
 });
 
 router.get('/book_hot', function (req, res) {

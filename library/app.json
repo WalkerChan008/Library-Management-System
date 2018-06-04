@@ -50,5 +50,6 @@
         "selectedIconPath": "/images/mine-2.png"
       }
     ]
-  }
+  },
+  "debug": true
 }

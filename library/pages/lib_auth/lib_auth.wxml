@@ -1,7 +1,7 @@
 <!--pages/lib_auth/lib_auth.wxml-->
 <view class="container">
   <view class="login-icon">
-    <image class="login-img" mode="widthFix" src="../../images/usermenu/guet_lib.jpg"></image>
+    <image class="login-img" mode="widthFix" src="../../images/usermenu/guet_lib.jpg" bindload="imageLoad"></image>
   </view>
   <view class="login-from">
 

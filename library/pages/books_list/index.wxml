@@ -5,27 +5,40 @@
     为您找到相关结果<text> {{list_count}} </text>条
   </view>
 
-  <view class="list-wrap">
-    <block wx:for="{{b_list}}" wx:key="*this">
-      <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
-        <view class="list-item">
-          <image class="book-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
-          <cover-view wx:if="{{ !item.callno }}">未馆藏</cover-view>
-          <view class="book-cont">
-            <text class="book-title">{{ item.title }}</text>
-            <text class="book-author">{{ item.author }}</text>
-            <text class="book-summary">{{ item.summary }}</text>
-          </view>
-        </view>
-      </navigator>
-    </block>
-  </view>
+  <scroll-view scroll-y="true" bindscrolltolower="bookScrollToLower">
 
-  <!-- 图书推荐 start -->
-  <view class="command">
-    <text>没有找到想要的书，去图书推荐吧</text>
-    <button type="primary" plain="true" bindtap="command">图书推荐</button>
-  </view>
-  <!-- 图书推荐 end -->
+    <view class="list-wrap">
+      <block wx:for="{{b_list}}" wx:key="id">
+        <navigator url="../books_info/index?code_type=isbn&result={{ item.isbn13 }}">
+          <view class="list-item">
+            <image class="book-img" src="{{ item.images.large || item.image }}" bindload="imageLoad"></image>
+            <view class="cover-text" wx:if="{{ !item.callno }}">未馆藏</view>
+            <view class="book-cont">
+              <text class="book-title">{{ item.title }}</text>
+              <text class="book-author">{{ item.author }}</text>
+              <text class="book-summary">{{ item.summary }}</text>
+            </view>
+          </view>
+        </navigator>
+      </block>
+    </view>
+
+    <view class="page__ft">
+      <view wx:if="{{ loading }}" class="weui-loadmore">
+          <view class="weui-loading"></view>
+          <view class="weui-loadmore__tips">正在加载</view>
+      </view>
+
+      <!-- 图书推荐 start -->
+      <view wx:if="{{ loadingComplete }}" class="command">
+        <text>没有找到想要的书，去图书推荐吧</text>
+        <button type="primary" plain="true" bindtap="command">图书推荐</button>
+      </view>
+      <!-- 图书推荐 end -->
+    </view>
+
+  </scroll-view>
+
+
 
 </view>
