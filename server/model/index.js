@@ -293,23 +293,30 @@ model = {
      * 获取数据库中like排前10的数据
      * @param res - 响应参数
      */
-    getHotTop10: function (res) {
+    getHotTop10: function (book_type, res) {
         var db = this.db;
 
-        db._sortByRate('books_info', {avg_rate: {$exists: true}})
+        var json = {
+            avg_rate: {
+                $exists: true
+            }
+        };
+
+        if(book_type != 0) {
+            json.type = parseInt(book_type);
+        }
+
+        db._sortByRate('books_info', json)
             .then( (data) => {
                 data = this.toFixedRate(data);
                 res.jsonp(data);
                 res.end();
             })
-            .catch( (error) => {
-                console.log(error);
-            })
     },
 
     /**
      * 保留小数点后一位
-     * @param data - 图书信息（数组）
+     * @param {Array} data - 图书信息（数组）
      */
     toFixedRate: function (data) {
         var toStr = Object.prototype.toString;
@@ -327,6 +334,10 @@ model = {
         return dataArr;
     },
 
+    /**
+     * 获取用户信息
+     * @param {String} openid - 用户唯一识别
+     */
     getUserInfo: function (openid, res) {
         var db = this.db;
 
@@ -338,13 +349,53 @@ model = {
     },
 
     /**
+     * 获取用户唯一识别
+     * @param {String} js_code - 获取凭证
+     */
+    getOpenid: function (js_code, res) {
+        var https = require('https'),
+            qs = require('querystring');
+
+        var query = qs.stringify({
+            appid: 'wx8365f68bbbbe0a2f',
+            secret: '957b3819f60716e3af1f17396f753d0c',
+            js_code: js_code,
+            grant_type: 'authorization_code'
+        })
+
+        // 请求参数
+        var options = {
+            hostname: 'api.weixin.qq.com',
+            path: '/sns/jscode2session?' + query,
+            method: 'GET'
+        };
+
+        var req = https.request(options, result => {
+
+            console.log('REQUEST_STATUS: ' + result.statusCode);
+
+            result.setEncoding('utf8');
+            result.on('data', function (chunk) {
+                chunk = JSON.parse(chunk);
+                res.jsonp(chunk);
+                res.end();
+            });
+        })
+
+        req.on('error', e => {
+            console.log('problem with request: ' + e.message);
+        })
+
+        req.end();
+    },
+
+    /**
      * 保存微信用户数据
+     * @param {Object} req - 请求参数
      */
     saveUserInfo: function (req, res) {
         // req.body
         var db = this.db;
-
-        console.log(req.body.nickName)
 
         var json = {
             filter: {
@@ -369,7 +420,7 @@ model = {
             .then( data => {
                 // 判断该用户是否存在于数据库
                 if(data.length > 0) {    // 存在 将该条数据返回
-                    console.log('用户数据已存在！更新头像和名称...');
+                    console.log(req.body.nickName + '的数据已存在！更新头像和名称...');
                     db._findOneAndUpdate('wx_user', json)
                     .then( data => {
                         res.jsonp(data.value);
@@ -396,7 +447,7 @@ model = {
 
     /**
      * 获取图书馆读者证权限
-     * @param accountInfo - 图书馆账号密码信息
+     * @param {Object} accountInfo - 图书馆账号密码信息
      * @param res - 响应参数
      */
     getAuth: function (accountInfo, res) {
@@ -456,7 +507,7 @@ model = {
 
     /**
      * 取消图书馆读者证权限
-     * @param openid - 取消图书馆授权的微信用户
+     * @param {String} openid - 取消图书馆授权的微信用户
      * @param res - 响应参数
      */
     cancelAuth: function (openid, res) {
@@ -495,7 +546,7 @@ model = {
 
     /**
      * 图书详情借书接口
-     * @param query - 所借书本的code_39和借书人openid
+     * @param {Object} query - 所借书本的code_39和借书人openid
      * @param res - 响应参数
      */
     loanBook: function (query, res) {
@@ -564,7 +615,7 @@ model = {
 
     /**
      * 获取已借待还的书籍信息
-     * @param codeArr - 已借书籍条码号数组
+     * @param {Array} codeArr - 已借书籍条码号数组
      * @param res - 响应参数
      */
     getLoanBookInfo: function (codeArr, res) {
@@ -599,7 +650,7 @@ model = {
 
     /**
      * 还书接口
-     * @param query - 已借书籍的用户和书籍code_39
+     * @param {Object} query - 已借书籍的用户和书籍code_39
      * @param res - 响应参数
      */
     returnBook: function (query, res) {
@@ -1033,6 +1084,12 @@ model = {
 
         db._find('books_rate', {isbn13: isbn}, {_id: 0}, {_id: -1}, 3)
             .then( data1 => {
+                if(data1.length == 0) {
+                    res.jsonp(data1);
+                    res.end();
+                    return;
+                }
+
                 data1.forEach( (item, index) => {
                     rateArr[index] = db._find('wx_user', {openid: item.openid}, {_id: 0, avatarUrl: 1, nickName: 1})
                         .then( data2 => {

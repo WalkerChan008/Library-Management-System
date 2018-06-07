@@ -18,7 +18,8 @@ Page({
 
     console.log(formObj)
 
-    if(!formObj.title) {
+    // 填写字段required
+    if(!formObj.title) {  // 书名不为空时
       wx.showModal({
         title: '提示',
         content: '书名不能为空！',
@@ -26,7 +27,7 @@ Page({
         confirmText: '关闭'
       })
       return
-    } else if (!formObj.wechat && !formObj.phone) {
+    } else if (!formObj.wechat && !formObj.phone) {  // 两者之一不为空
       wx.showModal({
         title: '提示',
         content: '联系方式至少填写一项！',

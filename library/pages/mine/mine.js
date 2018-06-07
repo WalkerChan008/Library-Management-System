@@ -32,12 +32,16 @@ Page({
         success: res => {
           wx.request({
             method: 'GET',
-            url: 'https://api.weixin.qq.com/sns/jscode2session',
+            // url: 'https://api.weixin.qq.com/sns/jscode2session',
+            // data: {
+            //   appid: 'wx8365f68bbbbe0a2f',
+            //   secret: '957b3819f60716e3af1f17396f753d0c',
+            //   js_code: res.code,
+            //   grant_type: 'authorization_code'
+            // },
+            url: this.url + '/getOpenid',
             data: {
-              appid: 'wx8365f68bbbbe0a2f',
-              secret: '957b3819f60716e3af1f17396f753d0c',
-              js_code: res.code,
-              grant_type: 'authorization_code'
+              js_code: res.code
             },
             success: res => {
               // 数据库中无此条数据时插入
@@ -104,7 +108,7 @@ Page({
   onShow: function () {
     wx.getSetting({
       success: res => {
-        
+        console.log(res)
         if (res.authSetting['scope.userInfo']) {
 
           wx.getStorage({
@@ -151,6 +155,9 @@ Page({
           })
 
         } else {
+          wx.removeStorage({
+            key: 'wxUserInfo'
+          })
           this.setData({
             wxUserInfo: {},
             wxAuth: false

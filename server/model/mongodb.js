@@ -89,7 +89,7 @@ var util = {
     _sortByRate: function (collection_name, json) {
         return new Promise(function (resolve, reject) {
             connectDB(function (db) {
-                var result = db.collection(collection_name).find(json).sort({avg_rate: -1});
+                var result = db.collection(collection_name).find(json).sort({avg_rate: -1}).limit(10);
                 resolve(result.toArray());
             });
         })

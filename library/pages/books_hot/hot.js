@@ -7,10 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    all_list: [],
     top1: {},
     rank_list: [],
-    pickerArr: ['总榜', '计算机榜单', '自然科学', '外语榜单', '文学榜单', '历史榜单', '小说榜单', '其他' ],
+    pickerArr: ['总榜', '计算机科学', '社会科学', '外语榜单', '文学榜单', '历史榜单', '小说榜单', '其他' ],
     pickerIndex: 0
   },
 
@@ -31,31 +30,33 @@ Page({
    * 更换榜单列表
    */
   changeList: function (value) {
-    var all_list = [...this.data.all_list]  // 深度克隆数组 ES6语法
 
     var top1 = {},
         rank_list = []
 
-    if(value == 0) {
+    wx.request({
+      url: this.url + '/book_hot',
+      data: {
+        book_type: value
+      },
+      success: res => {
+        rank_list = res.data
+        top1 = rank_list.shift() || {}
 
-      top1 = all_list.shift()
-      rank_list = all_list
+        this.setData({
+          top1: top1,
+          rank_list: rank_list
+        })
 
-    } else {
-
-      all_list.forEach((item, index) => {
-        item.type == value ? rank_list.push(item) : ''
-      })
-
-      top1 = rank_list.shift() || {}
-    }
-
-    console.log(top1)
-
-    this.setData({
-      top1: top1,
-      rank_list: rank_list
+        wx.showToast({
+          title: '切换中',
+          icon: 'loading',
+          mask: true,
+          duration: 500
+        })
+      }
     })
+
   },
 
   imageLoad: function () {
@@ -87,24 +88,24 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var pickerIndex = this.data.pickerIndex
+
     var rank_list,
         top1 = {}
 
     wx.request({
       url: this.url + '/book_hot',
+      data: {
+        book_type: pickerIndex
+      },
       success: (data) => {
-        this.setData({
-          all_list: data.data
-        })
-        rank_list = data.data;
-        top1 = rank_list.shift();
 
-        console.log(rank_list);
+        rank_list = data.data
+        top1 = rank_list.shift()
+
         this.setData({
           top1: top1,
-          rank_list: rank_list,
-
-          pickerIndex: 0
+          rank_list: rank_list
         })
       }
     })

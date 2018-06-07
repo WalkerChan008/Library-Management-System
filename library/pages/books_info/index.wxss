@@ -33,6 +33,9 @@
   height: 100rpx;
   font-size: 46rpx;
   color: #424242;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .box-cont {
   display: flex;

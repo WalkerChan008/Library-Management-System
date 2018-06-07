@@ -18,23 +18,26 @@ Page({
     favor_flag: false,  // 是否收藏此书
 
     rate_list: [],   // 评价列表
+
+    onshow_flag: false  // onshow函数内代码执行与否的标识
   },
 
   /**
-   * 绑定展开折叠点击事件
-   * 文本过长折叠
+   * 图书简介展开折叠
    */
   iconTap: function () {
     this.setData({isFold: !this.data.isFold})
   },
 
   /**
-   * 折叠列表事件
+   * 馆藏信息折叠列表事件
    * @param e - 事件源对象
    */
   kindToggle: function (e) {
     var id = e.currentTarget.id,
         list = this.data.b_info.collection_info;
+
+    // 循环馆藏信息列表
     for (var i = 0, len = list.length; i < len; ++i) {
       if (list[i].code_39 == id) {
         list[i].open = !list[i].open
@@ -65,6 +68,7 @@ Page({
         success: (res) => {
           if(res.confirm) {
             
+            // 调用扫码接口
             wx.scanCode({
               onlyFromCamera: true,
               success: res => {
@@ -119,6 +123,7 @@ Page({
       wx.showModal({
         title: '借书失败',
         content: '未进行图书馆读者认证。是否前往认证？',
+        confirmText: '前往',
         success: res => {
           if(res.confirm) {
             if (wxUserInfo.openid) {  // 判断是否已登录
@@ -138,10 +143,10 @@ Page({
   },
 
   /**
-   * 添加书籍到我的收藏
+   * 图书收藏状态更改
    * @param e - 事件源对象
    */
-  addToFavor: function (e) {
+  changeFavor: function (e) {
     var wxUserInfo = this.data.wxUserInfo
 
     var isbn = e.currentTarget.id,
@@ -220,7 +225,7 @@ Page({
     
     if (libAuth) {
       commandArr.forEach( (item, index) => {
-        if (commandFlag) return
+        if (commandFlag) return   // 匹配成功   不再继续往下执行
         commandFlag = item == isbn ? true : false
       })
 
@@ -293,6 +298,9 @@ Page({
     }
   },
 
+  /**
+   * 图片加载完成事件
+   */
   imageLoad: function () {
     setTimeout(() => {
       wx.hideLoading()
@@ -304,6 +312,9 @@ Page({
     }, 500)
   },
 
+  /**
+   * 绑定分享事件
+   */
   bindShare: function () {
     wx.showToast({
       title: '未登录',
@@ -339,8 +350,8 @@ Page({
     console.log(options)
 
     var wxUserInfo = {},
-      favorBook = [],
-      favor_flag = false
+        favorBook = [],
+        favor_flag = false
 
     codeQuery = options  // {OBJECT} 码的类型 & 条码号
 
@@ -351,8 +362,8 @@ Page({
     wx.request({    // 向后台发起请求，获取图书信息数据
       url: this.url + '/' + codeQuery.code_type + '_search?' + codeQuery.code_type + '=' + codeQuery.result,
       success: (res) => {
-        b_info = res.data[0],
-        list = b_info.collection_info || [];
+        b_info = res.data[0]
+        list = b_info.collection_info || []
         isbn = b_info.isbn13
 
         console.log(b_info);
@@ -381,12 +392,12 @@ Page({
           list: list
         })
 
+        // 通过wxUserInfo获取收藏信息
         wx.getStorage({
           key: 'wxUserInfo',
           success: (res) => {
             wxUserInfo = res.data
-            favorBook = wxUserInfo.favor_book
-            favorBook = favorBook ? favorBook : []
+            favorBook = wxUserInfo.favor_book || []
 
             favorBook.forEach((item, index) => {  // 循环遍历 为true时显示已收藏
               console.log(item)
@@ -401,7 +412,8 @@ Page({
             console.log(res.data)
             this.setData({
               wxUserInfo: wxUserInfo,
-              favor_flag: favor_flag
+              favor_flag: favor_flag,
+              onshow_flag: true
             })
 
           },
@@ -422,9 +434,19 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var onshow_flag = this.data.onshow_flag
+    if (onshow_flag) {
+      console.log('books_info onShow')
 
-
-
+      wx.getStorage({
+        key: 'wxUserInfo',
+        success: res => {
+          this.setData({
+            wxUserInfo: res.data
+          })
+        },
+      })
+    }
   },
 
   /**

@@ -67,7 +67,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var pageIndex = this.data.pageIndex
+    var pageIndex = this.data.pageIndex,
+        loading = this.data.loading,
+        loadingComplete = this.data.loadingComplete
 
     var b_info = {},
         isbn = ''
@@ -90,8 +92,16 @@ Page({
             pageIndex: pageIndex
           },
           success: res => {
+            if (res.data.length < 5) {
+              loading = !loading
+              loadingComplete = !loadingComplete
+            }
+
             this.setData({
-              rate_list: res.data
+              rate_list: res.data,
+
+              loading: loading,
+              loadingComplete: loadingComplete
             })
           }
         })

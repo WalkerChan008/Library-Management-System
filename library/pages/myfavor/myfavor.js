@@ -41,8 +41,12 @@ Page({
             success: res => {
               console.log(res.data)
               wxUserInfo = res.data
-              favorBook = wxUserInfo.favor_book
-              favorBook = favorBook ? favorBook : []
+              favorBook = wxUserInfo.favor_book || []
+
+              wx.setStorage({
+                key: 'wxUserInfo',
+                data: wxUserInfo
+              })
 
               wx.request({
                 method: 'POST',
@@ -131,6 +135,12 @@ Page({
           })
 
         } else {
+
+          this.setData({
+            wxUserInfo: wxUserInfo,
+            b_list: [],
+            list_count: 0
+          })
 
           setTimeout(() => {
             wx.showToast({

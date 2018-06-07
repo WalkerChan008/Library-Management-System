@@ -21,13 +21,16 @@ router.get('/value_search', function (req, res) {
 });
 
 router.get('/book_hot', function (req, res) {
-    model.getHotTop10(res);
+    model.getHotTop10(req.query.book_type, res);
 });
 
 router.get('/getUserInfo', function (req, res) {
     model.getUserInfo(req.query.openid, res);
 });
 
+router.get('/getOpenid', function (req, res) {
+    model.getOpenid(req.query.js_code, res);
+});
 
 router.post('/saveUserInfo', function (req, res) {
     model.saveUserInfo(req, res);

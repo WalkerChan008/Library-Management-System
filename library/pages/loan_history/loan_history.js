@@ -77,6 +77,7 @@ Page({
               b_list.forEach((item, index) => {  // 遍历图书信息数组
                 item.loan_history = loan_history[index]
               })
+              b_list.reverse()
               console.log(b_list)
               this.setData({
                 b_list: b_list,

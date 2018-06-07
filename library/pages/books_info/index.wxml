@@ -23,9 +23,9 @@
     </view>
   </view>
 
-
+    <!-- 按钮组 start -->
     <view class="box-btn">
-      <view id="{{ b_info.isbn13 }}" class="favor" bindtap="addToFavor">
+      <view id="{{ b_info.isbn13 }}" class="favor" bindtap="changeFavor">
         <image src="../../images/favor-{{ favor_flag ? 2 : 1 }}.png"></image>
         <text>{{ favor_flag ? '已收藏' : '收藏' }}</text>
       </view>
@@ -36,6 +36,7 @@
         <button wx:else bindtap="bindShare"></button>
       </view>
     </view>
+    <!-- 按钮组 end -->
 
   <!-- 简介 start -->
   <view class="book-box">
